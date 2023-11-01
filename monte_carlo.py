@@ -2,6 +2,7 @@ import chess
 import chess.svg
 import chess.engine
 import random
+from tqdm import tqdm
 
 def predict(boardFen, times):
     result = {'win': 0, 'lose': 0, 'draw': 0}
@@ -15,7 +16,7 @@ def predict(boardFen, times):
     #     'three_reps': 0
     # }
 
-    for x in range(times):
+    for x in tqdm(range(times)):
         board = chess.Board(boardFen)
         while not board.is_game_over():
             moves = list(board.legal_moves)
@@ -68,16 +69,20 @@ def generateConfig(moves, whiteStrength, blackStrength):
 
 def main():
     # using hardcoded configuration
-    print(predict('8/8/8/p7/2kb4/7r/2K5/5R2 w - - 4 41', 1000))
-    # using hardcoded configuration where black is one move from winning
-    print(predict('8/7p/7r/4K3/5q1r/8/6k1/1R6 w - - 2 81', 1000))
+    if False:
+        print(predict('8/8/8/p7/2kb4/7r/2K5/5R2 w - - 4 41', 1000))
+        # using hardcoded configuration where black is one move from winning
+        print(predict('8/7p/7r/4K3/5q1r/8/6k1/1R6 w - - 2 81', 1000))
 
-    # using generated configuration where white is stronger
-    fen = generateConfig(35, {'time': 0.1, 'depth': 20, 'nodes': 1000}, {'time': 0.01, 'depth': 1, 'nodes': 5})
-    print(chess.Board(fen))
-    print(fen)
-    print(predict(fen, 1000))
-    # most results end in a draw
+        # using generated configuration where white is stronger
+        fen = generateConfig(35, {'time': 0.1, 'depth': 20, 'nodes': 1000}, {'time': 0.01, 'depth': 1, 'nodes': 5})
+        # print(chess.Board(fen))
+        # print(fen)
+        print(predict(fen, 1000))
+        # most results end in a draw
+
+    fen = generateConfig(35, {'time': 0.1, 'depth': 20, 'nodes': 10000}, {'time': 0.1, 'depth': 20, 'nodes': 5000})
+    print(predict(fen, 10000))
 
 if __name__ == "__main__":
     main()
