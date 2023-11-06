@@ -26,6 +26,9 @@ def predict(boardFen, times):
             # print(board)
         res = board.result()
         # out = board.outcome().termination.value 
+        print(res)
+        print(board)
+        print(board.fen())
         if res == '1-0':
             result['win']+=1
         elif res == '0-1':
