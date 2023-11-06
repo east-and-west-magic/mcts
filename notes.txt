@@ -1,0 +1,6 @@
+Experiment 1:
+- Use the same fen (generated from one chess engine having node = 10000 and another having nodes = 5000)
+- Run predict with 10000, 50000, and 100000 simulations.
+
+Experiment 2:
+- Generate differerent fens (if they are slightly different)

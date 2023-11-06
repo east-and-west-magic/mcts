@@ -80,9 +80,16 @@ def main():
         # print(fen)
         print(predict(fen, 1000))
         # most results end in a draw
-
-    fen = generateConfig(35, {'time': 0.1, 'depth': 20, 'nodes': 10000}, {'time': 0.1, 'depth': 20, 'nodes': 5000})
-    print(predict(fen, 10000))
+    f = open("results.txt", "a")
+    simulations = 50000
+    times = 50
+    # fen = generateConfig(35, {'time': 0.1, 'depth': 20, 'nodes': 10000}, {'time': 0.1, 'depth': 20, 'nodes': 5000})
+    fen = '3q3r/6p1/6k1/5p2/PP6/3r4/2Q2RP1/2R3K1 w - - 5 36'
+    f.write('board configuration with fen representation: ' + fen + '\n')
+    f.write('ran ' + str(simulations) + ' simulations ' + str(times) + ' times\n')
+    for x in tqdm(range(times)):
+        f.write(str(predict(fen, simulations)) + '\n')
+    f.close()
 
 if __name__ == "__main__":
     main()
