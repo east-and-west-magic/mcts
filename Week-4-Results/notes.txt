@@ -1,0 +1,67 @@
+Experimental Design:
+- Generate a fen 10 or 20 moves from the end of the game
+- See which side has the advantage from analysis of board configuration by chess engine
+- Run simulations with 10000 games.
+- Run this 50 times
+- Plot on Excel graph
+- If the win and lose lines are interwoven, do more trials
+
+Experiment 1:
+- Engine 1: 0.1 time
+- Engine 2: 0.05 time
+- 10 moves from end
+
+Experiment 2:
+- Engine 1: 0.05 time
+- Engine 2: 0.1 time
+- 10 moves from end
+
+Experiment 3:
+- Engine 1: 0.1 time
+- Engine 2: 0.05 time
+- 20 moves from end
+
+Experiment 4:
+- Engine 1: 0.05 time
+- Engine 2: 0.1 time
+- 20 moves from end
+
+Experiment 5:
+- Engine 1: 15 depth
+- Engine 2: 20 depth
+- 10 moves from end
+
+Experiment 6:
+- Engine 1: 20 depth
+- Engine 2: 15 depth
+- 10 moves from end
+
+Experiment 7:
+- Engine 1: 15 depth
+- Engine 2: 20 depth
+- 20 moves from end
+
+Experiment 8:
+- Engine 1: 20 depth
+- Engine 2: 15 depth
+- 20 moves from end
+
+Experiment 9:
+- Engine 1: 1500K nodes
+- Engine 2: 1000K nodes
+- 10 moves from end
+
+Experiment 10:
+- Engine 1: 1000K nodes
+- Engine 2: 1500K nodes
+- 10 moves from end
+
+Experiment 11:
+- Engine 1: 1500K nodes
+- Engine 2: 1000K nodes
+- 20 moves from end
+
+Experiment 12:
+- Engine 1: 1000K nodes
+- Engine 2: 1500K nodes
+- 20 moves from end
