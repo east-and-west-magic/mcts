@@ -32,9 +32,10 @@ def generateConfig(movesFromEnd, parameter, whiteStrength, blackStrength):
         while not board.is_game_over():
             res = engine.play(board, chess.engine.Limit(time=whiteStrength['time']))
             board.push(res.move)
-
-            res = engine.play(board, chess.engine.Limit(time=blackStrength['time']))
-            board.push(res.move)
+            
+            if not board.is_game_over():
+                res = engine.play(board, chess.engine.Limit(time=blackStrength['time']))
+                board.push(res.move)
 
             if (fenQueue.full()):
                 fenQueue.get()
@@ -44,8 +45,9 @@ def generateConfig(movesFromEnd, parameter, whiteStrength, blackStrength):
             res = engine.play(board, chess.engine.Limit(depth=whiteStrength['depth']))
             board.push(res.move)
 
-            res = engine.play(board, chess.engine.Limit(depth=blackStrength['depth']))
-            board.push(res.move)
+            if not board.is_game_over():
+                res = engine.play(board, chess.engine.Limit(depth=blackStrength['depth']))
+                board.push(res.move)
 
             if (fenQueue.full()):
                 fenQueue.get()
@@ -55,14 +57,13 @@ def generateConfig(movesFromEnd, parameter, whiteStrength, blackStrength):
             res = engine.play(board, chess.engine.Limit(nodes=whiteStrength['nodes']))
             board.push(res.move)
 
-            res = engine.play(board, chess.engine.Limit(nodes=blackStrength['nodes']))
-            board.push(res.move)
+            if not board.is_game_over():
+                res = engine.play(board, chess.engine.Limit(nodes=blackStrength['nodes']))
+                board.push(res.move)
 
             if (fenQueue.full()):
                 fenQueue.get()
             fenQueue.put(board.fen())
-
-
     engine.quit()
     return fenQueue.get()
 
@@ -148,7 +149,7 @@ def main():
                 dict = predict(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.1, fen])
             writer.writerow([""])
-    if True:
+    if False:
         with open('./Week-4-Results/depth2.csv', 'w', newline='') as file:
             writer = csv.writer(file)
      
@@ -157,25 +158,33 @@ def main():
             simulations = 50000
             times = 50
 
-            fen = generateConfig(20, 'depth', {'depth': 20}, {'depth': 15})
-            for x in tqdm(range(times)):
-                dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 20, 15, 20, fen])
-            writer.writerow([""])
+            # fen = generateConfig(20, 'depth', {'depth': 20}, {'depth': 15})
+            # for x in tqdm(range(times)):
+            #     dict = predict(fen, simulations)
+            #     writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 20, 15, 20, fen])
+            # writer.writerow([""])
 
             fen = generateConfig(20, 'depth', {'depth': 15}, {'depth': 20})
-            for x in tqdm(range(times)):
+            for x in tqdm(range(41)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 20, 15, 20, fen])
+                writer.writerow([x + 10, dict['win'], dict['lose'], dict['draw'], simulations, 20, 15, 20, fen])
             writer.writerow([""])
-
+    if False:
         with open('./Week-4-Results/time2.csv', 'w', newline='') as file:
             writer = csv.writer(file)
      
             writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "White Time", "Black Time", "Moves From End", "Fen"])
 
-            simulations = 50000
+
+            simulations = 10000
             times = 50
+
+            fen = generateConfig(20, 'time', {'time': 0.05}, {'time': 0.1})
+            for x in tqdm(range(times)):
+                dict = predict(fen, simulations)
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.1, 20, fen])
+            writer.writerow([""])
+            simulations = 50000
             
             fen = generateConfig(10, 'time', {'time': 0.1}, {'time': 0.05})
             for x in tqdm(range(times)):
@@ -183,12 +192,42 @@ def main():
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, 10, fen])
             writer.writerow([""])
 
-            simulations = 10000
+    if True:
+        with open('./Week-4-Results/nodes2.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+     
+            writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "White Nodes", "Black Nodes", "Moves From End", "Fen"])
 
-            fen = generateConfig(20, 'time', {'time': 0.05}, {'time': 0.1})
+            simulations = 10000
+            times = 50
+            
+            # fen = generateConfig(10, 'nodes', {'nodes': 15000}, {'nodes': 10000})
+            # print(fen)
+            # for x in tqdm(range(times)):
+            #     dict = predict(fen, simulations)
+            #     writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 15000, 10000, 10, fen])
+            # writer.writerow([""])
+
+            # fen = generateConfig(10, 'nodes', {'nodes': 10000}, {'nodes': 15000})
+            # fen = '6R1/1p6/p1b1k1p1/7p/2rB1K1P/5P2/6P1/8 w - - 0 45'
+            # print(fen)
+            # for x in tqdm(range(30)):
+            #     dict = predict(fen, simulations)
+            #     writer.writerow([x + 1 + 20, dict['win'], dict['lose'], dict['draw'], simulations, 10000, 15000, 10, fen])
+            # writer.writerow([""])
+
+            fen = generateConfig(20, 'nodes', {'nodes': 15000}, {'nodes': 10000})
+            print(fen)
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.1, 20, fen])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 15000, 10000, 20, fen])
+            writer.writerow([""])
+
+            fen = generateConfig(20, 'nodes', {'nodes': 10000}, {'nodes': 15000})
+            print(fen)
+            for x in tqdm(range(times)):
+                dict = predict(fen, simulations)
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 10000, 15000, 20, fen])
             writer.writerow([""])
 
 
