@@ -231,7 +231,7 @@ def main():
             writer.writerow([""])
 
     if True:
-        with open('./Week-5-Results/time2.csv', 'w', newline='') as file:
+        with open('./Week-5-Results/time3.csv', 'w', newline='') as file:
             writer = csv.writer(file)
      
             writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "White Time", "Black Time", "Fen", "Gap (Win / (Win + Lose))"])
@@ -239,49 +239,48 @@ def main():
             simulations = 10000
             times = 25
             
-            dictionary = generateConfig(10, 'time', {'time': 0.2}, {'time': 0.05})
+            dictionary = generateConfig(10, 'time', {'time': 0.05}, {'time': 0.2})
             fen = dictionary['fen']
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 20000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 30000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 35000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 40000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 45000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
 
             simulations = 50000
             for x in tqdm(range(times)):
                 dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.1, 0.05, fen, dictionary['result']])
+                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, 0.05, 0.2, fen, dictionary['result']])
             writer.writerow([""])
-
 
 
 if __name__ == "__main__":
