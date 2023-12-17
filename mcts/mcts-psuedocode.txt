@@ -1,0 +1,53 @@
+MCTS Pseudocode:
+
+# Node
+Properties:
+chessboard state represented by FEN: string
+wins: integer
+visits: integer
+child nodes: Node[]
+parent node: Node
+player: white or black
+
+Methods:
+update wins
+update visits
+update children
+
+
+# Algorithm
+initialize root node representing initial chessboard configuration (chessboard state = initial chessboard configuration, wins = 0, visits = 0, child nodes = [], parent node = null, player = white)
+
+for fixed number of iterations:
+
+    # Selection
+    set current node = root node
+    while current node has children:
+        for each node in current's children:
+            calculate UCB (upper confidence bound for trees) for node
+        set current = child node with maximum UCB
+    
+    # Expansion
+    set current configuration = current node's chessboard state
+    for each move in legal moves for current configuration:
+        create new node that represents board state after move
+        add new node as a child of the current node
+    set simulation node = randomly picked child node of current node or first child node of current node
+
+    # Simulation
+    set starting configuration = simulation node's chessboard state
+    while chess game has not ended:
+        choose random move from legal moves
+        play move
+    set outcome = outcome of the game (win/lose/draw)
+
+    # Backpropagation
+    set current node = simulation node
+    while current node is not null:
+        if (current node's player is white and outcome is win or current node's player is black and outcome is lose):
+            add one to current node's wins
+        add one to current node's visits
+        set current node = current node's parent node
+
+# Possible UCB Calculation
+wins + C * sqrt(ln(visits of parent node) / visits of child node)
