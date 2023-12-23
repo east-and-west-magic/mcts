@@ -7,6 +7,9 @@ class Node:
         self.wins = 0
         self.visits = 0
 
+    def __str__(self):
+        return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}"
+
     def update_wins(self):
         self.wins += 1
 

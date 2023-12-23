@@ -1,12 +1,14 @@
 import chess
 import chess.svg
 import chess.engine
-import Node
+from node import Node
+from mcts import MonteCarloTreeSearch
 
 
 def main():
-    user = Node(chess.Board(), None, chess.WHITE)
+    root_node = Node(chess.Board(), None, chess.WHITE)
     print(user)
+    print(root_node)
     
 
 if __name__ == "__main__":
