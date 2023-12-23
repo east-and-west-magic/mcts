@@ -18,7 +18,7 @@ update children
 # Algorithm
 initialize root node representing initial chessboard configuration (chessboard state = initial chessboard configuration, wins = 0, visits = 0, child nodes = [], parent node = null, player = white)
 
-for fixed number of iterations:
+for fixed number of iterations / time constraint:
 
     # Selection
     set current node = root node
@@ -32,7 +32,9 @@ for fixed number of iterations:
     for each move in legal moves for current configuration:
         create new node that represents board state after move
         add new node as a child of the current node
-    set simulation node = randomly picked child node of current node or first child node of current node
+    set simulation node = randomly picked child node of current node
+
+    # from current node we do Monte Carlo, Monte Carlo randomly picks next node, so in line 35 we randomly pick one
 
     # Simulation
     set starting configuration = simulation node's chessboard state
@@ -49,5 +51,27 @@ for fixed number of iterations:
         add one to current node's visits
         set current node = current node's parent node
 
+
 # Possible UCB Calculation
 wins + C * sqrt(ln(visits of parent node) / visits of child node)
+
+1. opponents will pick best move - it's minimax style
+2. exploration - neighborhood or random moves (most of exploration is picking random moves)
+3. promising moves - (e4/e5 and knights are promising, a3/a4 are not promising)
+
+UCB formula is a combination of 2 and 3
+constant C (the bigger, the more exploration)
+UCB guided MCTS is doing 1, 2, and 3
+exploration - won't miss nodes that look bad but are actually good
+MCTS is not guaranteed to find the best move - but that's okay, as long as it outperforms humans
+
+manually create a partial tree
+create multiple manual partial trees and carefully check that 1 and 2 are working correctly
+- can look at some examples (think about what they look like), look at some slides/YouTube tutorials for examples of good trees, or manually create but make sure values make sense (but don't spend too much time on manual creation)
+when we compute the UCB we need to check the denominator's value is not 0
+- if it is 0, then we say the UCB is infinity (built-in value in Python), float('inf')
+- pick a random UCB that is infinity
+check selection and expansion parts against the tree
+1. select node based on max UCB - make C a variable (so you can pick different values)
+2. create all children, select random node
+3. don't have to do simulation and backpropagation
