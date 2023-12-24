@@ -2,6 +2,7 @@ import chess
 import chess.svg
 import chess.engine
 import random
+import math
 from node import Node
 
 class MonteCarloTreeSearch:
@@ -11,8 +12,20 @@ class MonteCarloTreeSearch:
     
     def selection(self):
         current = self.root
-        for child in current.children:
-            print(child)
+        while not current.is_leaf():
+            max_ucb = float("-inf")
+            selected_child = None
+            unvisited_children = []
+            for child in current.children:
+                if child.visits == 0:
+                    unvisited_children.append(child)
+                else:
+                    child_ucb = child.wins + self.c * math.sqrt(math.log(current.visits) / child.visits)
+                    if child_ucb > max_ucb:
+                        selected_child = child
+                        max_ucb = child_ucb
+            current = max[random.randint(0, len(max) - 1)]
+        return current
     
     def expansion(self, current_node):
         current_board = current_node.board

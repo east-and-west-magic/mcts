@@ -21,4 +21,7 @@ class Node:
     def add_child(self, child):
         self.children.append(child)
 
+    def is_leaf(self):
+        return not self.children
+
     
