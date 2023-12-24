@@ -24,7 +24,9 @@ class MonteCarloTreeSearch:
                     if child_ucb > max_ucb:
                         selected_child = child
                         max_ucb = child_ucb
-            current = max[random.randint(0, len(max) - 1)]
+                if unvisited_children:
+                    selected_child = random.choice(unvisited_children)
+            current = selected_child
         return current
     
     def expansion(self, current_node):

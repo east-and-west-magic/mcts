@@ -17,7 +17,7 @@ def main():
     # print(root_node)
     monte_carlo = MonteCarloTreeSearch(root_node, 2)
     monte_carlo.expansion(root_node)
-    monte_carlo.selection()
+    print(monte_carlo.selection())
     
 
 if __name__ == "__main__":
