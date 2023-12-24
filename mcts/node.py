@@ -1,3 +1,5 @@
+import chess
+
 class Node:
     def __init__(self, board, parent, player):
         self.board = board
@@ -8,7 +10,7 @@ class Node:
         self.visits = 0
 
     def __str__(self):
-        return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}"
+        return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}, Player: {'White' if self.player else 'Black'}"
 
     def update_wins(self):
         self.wins += 1
