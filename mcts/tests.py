@@ -49,11 +49,24 @@ def main():
         child_node13 = Node(chess.Board("6Q1/4b2p/2p1k3/p1p1p3/q1P1P2p/2P1BP2/6K1/8 b - - 3 43"), child_node6, chess.BLACK, 9, 15)
         child_node6.add_child(child_node13)
         child_node14 = Node(chess.Board("5Q2/4b2p/2p1k3/p1p1p3/q1P1P2p/2P1BP2/6K1/8 b - - 3 43"), child_node6, chess.BLACK, 6, 10)
-        child_node7.add_child(child_node14)
+        child_node6.add_child(child_node14)
 
-        monte_carlo = MonteCarloTreeSearch(root_node, 2)
-        monte_carlo.expansion(monte_carlo.selection)
-        monte_carlo.print_tree(root_node)
+        if True:
+            print("test 1")
+            monte_carlo = MonteCarloTreeSearch(root_node, 2)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            for child in current.children:
+                print(child)
+        if False:
+            print("test 2")
+            monte_carlo = MonteCarloTreeSearch(root_node, 10000)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            for child in current.children:
+                print(child)
 
 
     # Tree 2
@@ -83,7 +96,22 @@ def main():
         child_node10 = Node(chess.Board("8/5b2/8/1p6/8/2kp4/8/2K5 b - - 3 172"), child_node4, chess.BLACK, 3, 3)
         child_node5.add_child(child_node10)
 
-        monte_carlo = MonteCarloTreeSearch(root_node, 3)
+        if False:
+            print("test 1")
+            monte_carlo = MonteCarloTreeSearch(root_node, 100)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            for child in current.children:
+                print(child)
+
+        print("test 2")
+        monte_carlo = MonteCarloTreeSearch(root_node, 5)
+        current = monte_carlo.selection()
+        print("children")
+        monte_carlo.expansion(current)
+        for child in current.children:
+            print(child)
     
 
 if __name__ == "__main__":
