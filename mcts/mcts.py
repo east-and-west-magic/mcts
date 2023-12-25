@@ -36,3 +36,8 @@ class MonteCarloTreeSearch:
             child_board.push(legal_move)
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE)
             current_node.add_child(child_node)
+    
+    def print_tree(self, node):
+        print(node)
+        for child in node.children:
+            self.print_tree(child)
