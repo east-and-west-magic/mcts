@@ -113,6 +113,40 @@ def main():
         for child in current.children:
             print(child)
     
+    # Tree 3
+    if False:
+        root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 80, 200)
+
+        child_node1 = Node(chess.Board("1r4B1/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 2 27"), root_node, chess.BLACK, 60, 100)
+        root_node.add_child(child_node1)
+        child_node2 = Node(chess.Board("1rB5/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 2 27"), root_node, chess.BLACK, 60, 100)
+        root_node.add_child(child_node2)
+
+        child_node3 = Node(chess.Board("6r1/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 0 28"), child_node1, chess.WHITE, 30, 60)
+        child_node1.add_child(child_node3)
+        child_node4 = Node(chess.Board("5rB1/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 3 28"), child_node1, chess.WHITE, 10, 40)
+        child_node1.add_child(child_node4)
+        child_node5 = Node(chess.Board("2r5/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 0 28"), child_node2, chess.WHITE, 20, 50)
+        child_node2.add_child(child_node5)
+        child_node6 = Node(chess.Board("r1B5/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 3 28"), child_node2, chess.WHITE, 20, 50)
+        child_node2.add_child(child_node6)
+
+        child_node7 = Node(chess.Board("5Rr1/p1p3k1/6p1/8/8/1Pb5/q1P2PP1/3K3R b - - 1 28"), child_node3, chess.BLACK, 20, 30)
+        child_node3.add_child(child_node7)
+        child_node8 = Node(chess.Board("6r1/p1p2Rk1/6p1/8/8/1Pb5/q1P2PP1/3K3R b - - 1 28"), child_node3, chess.BLACK, 10, 30)
+        child_node3.add_child(child_node8)
+        child_node9 = Node(chess.Board("5r2/p1p3kB/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node4, chess.BLACK, 14, 20)
+        child_node4.add_child(child_node9)
+        child_node10 = Node(chess.Board("5r2/p1p2Bk1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node4, chess.BLACK, 16, 20)
+        child_node4.add_child(child_node10)
+        child_node11 = Node(chess.Board("2r2R2/p1p3k1/6p1/8/8/1Pb5/q1P2PP1/3K3R b - - 1 28"), child_node5, chess.BLACK, 20, 30)
+        child_node5.add_child(child_node11)
+        child_node12 = Node(chess.Board("2r5/p1p2Rk1/6p1/8/8/1Pb5/q1P2PP1/3K3R b - - 1 28"), child_node5, chess.BLACK, 10, 20)
+        child_node5.add_child(child_node12)
+        child_node13 = Node(chess.Board("r7/p1pB2k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node6, chess.BLACK, 18, 30)
+        child_node6.add_child(child_node13)
+        child_node14 = Node(chess.Board("r7/pBp3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node6, chess.BLACK, 12, 20)
+        child_node6.add_child(child_node14)
 
 if __name__ == "__main__":
     main()
