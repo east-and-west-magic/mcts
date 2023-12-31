@@ -17,7 +17,7 @@ def main():
         monte_carlo.selection()
     
     # Tree 1
-    if True:
+    if False:
         root_node = Node(chess.Board("8/4bk1p/2p5/p1p1p3/q1P1P1Qp/2P1BP2/6K1/8 w - - 0 42"), None, chess.WHITE, 40, 100)
 
         child_node1 = Node(chess.Board("2Q5/4bk1p/2p5/p1p1p3/q1P1P2p/2P1BP2/6K1/8 b - - 1 42"), root_node, chess.BLACK, 30, 50)
@@ -96,7 +96,7 @@ def main():
         child_node10 = Node(chess.Board("8/5b2/8/1p6/8/2kp4/8/2K5 b - - 3 172"), child_node4, chess.BLACK, 3, 3)
         child_node5.add_child(child_node10)
 
-        if False:
+        if True:
             print("test 1")
             monte_carlo = MonteCarloTreeSearch(root_node, 100)
             current = monte_carlo.selection()
@@ -104,17 +104,17 @@ def main():
             monte_carlo.expansion(current)
             for child in current.children:
                 print(child)
-
-        print("test 2")
-        monte_carlo = MonteCarloTreeSearch(root_node, 5)
-        current = monte_carlo.selection()
-        print("children")
-        monte_carlo.expansion(current)
-        for child in current.children:
-            print(child)
+        if False:
+            print("test 2")
+            monte_carlo = MonteCarloTreeSearch(root_node, 5)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            for child in current.children:
+                print(child)
     
     # Tree 3
-    if False:
+    if True:
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 80, 200)
 
         child_node1 = Node(chess.Board("1r4B1/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 2 27"), root_node, chess.BLACK, 60, 100)
@@ -147,6 +147,23 @@ def main():
         child_node6.add_child(child_node13)
         child_node14 = Node(chess.Board("r7/pBp3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node6, chess.BLACK, 12, 20)
         child_node6.add_child(child_node14)
+
+        if True:
+            print("test 1")
+            monte_carlo = MonteCarloTreeSearch(root_node, 2)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            # for child in current.children:
+                # print(child)
+        if True:
+            print("test 2")
+            monte_carlo = MonteCarloTreeSearch(root_node, 10000)
+            current = monte_carlo.selection()
+            print("children")
+            monte_carlo.expansion(current)
+            # for child in current.children:
+                # print(child)
 
 if __name__ == "__main__":
     main()
