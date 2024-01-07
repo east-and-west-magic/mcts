@@ -68,6 +68,15 @@ def main():
             for child in current.children:
                 print(child)
 
+        if True:
+            print("test 3")
+            monte_carlo = MonteCarloTreeSearch(root_node, 2)
+            monte_carlo.selection()
+
+            print("test 4")
+            monte_carlo2 = MonteCarloTreeSearch(root_node, 100)
+            monte_carlo2.selection()
+
 
     # Tree 2
     if False:
@@ -112,6 +121,15 @@ def main():
             monte_carlo.expansion(current)
             for child in current.children:
                 print(child)
+        
+        if True:
+            print("test 3")
+            monte_carlo = MonteCarloTreeSearch(root_node, 2)
+            monte_carlo.selection()
+
+            print("test 4")
+            monte_carlo2 = MonteCarloTreeSearch(root_node, 100)
+            monte_carlo2.selection()
     
     # Tree 3
     if True:
@@ -167,8 +185,12 @@ def main():
             
         if True:
             print("test 3")
-            monte_carlo = MonteCarloTreeSearch(root_node, 100)
+            monte_carlo = MonteCarloTreeSearch(root_node, 2)
             monte_carlo.selection()
+
+            print("test 4")
+            monte_carlo2 = MonteCarloTreeSearch(root_node, 100)
+            monte_carlo2.selection()
             
 
 if __name__ == "__main__":
