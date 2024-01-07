@@ -105,7 +105,7 @@ def main():
         child_node10 = Node(chess.Board("8/5b2/8/1p6/8/2kp4/8/2K5 b - - 3 172"), child_node4, chess.BLACK, 3, 3)
         child_node5.add_child(child_node10)
 
-        if True:
+        if False:
             print("test 1")
             monte_carlo = MonteCarloTreeSearch(root_node, 100)
             current = monte_carlo.selection()

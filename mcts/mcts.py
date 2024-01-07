@@ -12,8 +12,9 @@ class MonteCarloTreeSearch:
         self.c = c
     
     def selection(self):
+        max_ucb = float("-inf")
+        max_children = []
         queue = Queue()
-        pq = PriorityQueue()
         queue.put(self.root)
         while not queue.empty():
             currentNode = queue.get()
@@ -25,12 +26,14 @@ class MonteCarloTreeSearch:
                 exploitation = currentNode.wins
                 exploration = self.c * math.sqrt(math.log(currentNode.parent.visits) / currentNode.visits)
                 print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
-                pq.put((-(exploitation + exploration), currentNode))
-
-        (priority, data) = pq.get()
-        print()
-        print("Node: " + str(data) + ", Priority: " + str(-priority))
-        return data
+                if exploration + exploitation > max_ucb:
+                    max_ucb = exploration + exploitation
+                    max_children = [currentNode]
+                elif exploration + exploitation == max_ucb:
+                    max_children.append(currentNode)
+        choice = random.choice(max_children)
+        print("Node: " + str(choice) + ", UCB: " + str(max_ucb))
+        return choice
     
     def expansion(self, current_node):
         current_board = current_node.board
