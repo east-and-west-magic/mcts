@@ -148,15 +148,15 @@ def main():
         child_node14 = Node(chess.Board("r7/pBp3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 4 28"), child_node6, chess.BLACK, 12, 20)
         child_node6.add_child(child_node14)
 
-        if True:
+        if False:
             print("test 1")
             monte_carlo = MonteCarloTreeSearch(root_node, 2)
             current = monte_carlo.selection()
-            print("children")
+            # print("children")
             monte_carlo.expansion(current)
             # for child in current.children:
                 # print(child)
-        if True:
+        if False:
             print("test 2")
             monte_carlo = MonteCarloTreeSearch(root_node, 10000)
             current = monte_carlo.selection()
@@ -164,6 +164,12 @@ def main():
             monte_carlo.expansion(current)
             # for child in current.children:
                 # print(child)
+            
+        if True:
+            print("test 3")
+            monte_carlo = MonteCarloTreeSearch(root_node, 100)
+            monte_carlo.selection()
+            
 
 if __name__ == "__main__":
     main()
