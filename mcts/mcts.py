@@ -4,7 +4,7 @@ import chess.engine
 import random
 import math
 from node import Node
-from queue import PriorityQueue
+from queue import PriorityQueue, Queue
 
 class MonteCarloTreeSearch:
     def __init__(self, root_node, c):
@@ -12,14 +12,14 @@ class MonteCarloTreeSearch:
         self.c = c
     
     def selection(self):
-        queue = []
+        queue = Queue()
         pq = PriorityQueue()
-        queue.append(self.root)
-        while queue:
-            currentNode = queue.pop(0)
+        queue.put(self.root)
+        while not queue.empty():
+            currentNode = queue.get()
             if not currentNode.is_leaf():
                 for child in currentNode.children:
-                    queue.append(child)
+                    queue.put(child)
             else:
                 print(currentNode)
                 exploitation = currentNode.wins
@@ -28,33 +28,9 @@ class MonteCarloTreeSearch:
                 pq.put((-(exploitation + exploration), currentNode))
 
         (priority, data) = pq.get()
-        print(data)
-        print(-priority)
+        print()
+        print("Node: " + str(data) + ", Priority: " + str(-priority))
         return data
-        # current = self.root
-        # while not current.is_leaf():
-        #     max_ucb = float("-inf")
-        #     selected_child = None
-        #     max_children = []
-        #     unvisited_children = []
-        #     for child in current.children:
-        #         if child.visits == 0:
-        #             unvisited_children.append(child)
-        #         else:
-        #             child_ucb = child.wins + self.c * math.sqrt(math.log(current.visits) / child.visits)
-        #             if child_ucb > max_ucb:
-        #                 max_children = []
-        #                 max_children.append(child)
-        #                 max_ucb = child_ucb
-        #             elif child_ucb == max_ucb:
-        #                 max_children.append(child)
-        #         if unvisited_children:
-        #             selected_child = random.choice(unvisited_children)
-        #         else:
-        #             selected_child = random.choice(max_children)
-        #     current = selected_child
-        #     print(current)
-        # return current
     
     def expansion(self, current_node):
         current_board = current_node.board
