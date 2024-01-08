@@ -4,7 +4,7 @@ import chess.engine
 import random
 import math
 from node import Node
-from queue import PriorityQueue, Queue
+from collections import deque
 
 class MonteCarloTreeSearch:
     def __init__(self, root_node, c):
@@ -14,16 +14,16 @@ class MonteCarloTreeSearch:
     def selection(self):
         max_ucb = float("-inf")
         max_children = []
-        queue = Queue()
-        queue.put(self.root)
-        while not queue.empty():
-            currentNode = queue.get()
+        q = deque()
+        q.append(self.root)
+        while q:
+            currentNode = q.popleft()
             if not currentNode.is_leaf():
                 for child in currentNode.children:
-                    queue.put(child)
+                    q.append(child)
             else:
                 print(currentNode)
-                exploitation = currentNode.wins
+                exploitation = currentNode.wins / currentNode.visits
                 exploration = self.c * math.sqrt(math.log(currentNode.parent.visits) / currentNode.visits)
                 print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
                 if exploration + exploitation > max_ucb:
