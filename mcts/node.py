@@ -8,6 +8,7 @@ class Node:
         self.children = []
         self.wins = wins
         self.visits = visits
+        self.end = board.is_game_over()
 
     def __str__(self):
         return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}, Player: {'White' if self.player else 'Black'}"
@@ -23,5 +24,8 @@ class Node:
 
     def is_leaf(self):
         return not self.children
+    
+    def is_end(self):
+        return self.end
 
     

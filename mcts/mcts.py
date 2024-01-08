@@ -52,7 +52,8 @@ class MonteCarloTreeSearch:
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0)
             current_node.add_child(child_node)
             # print(child_node)
-        return random.choice(current_node.children) # just simulate one time
+        if current_node.children: # how to deal with
+            return random.choice(current_node.children) # just simulate one time
     
     def simulation(self, current_node):
         current_board = current_node.board

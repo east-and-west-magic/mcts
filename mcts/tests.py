@@ -132,7 +132,7 @@ def main():
             monte_carlo2.selection()
     
     # Tree 3
-    if True:
+    if False:
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 80, 200)
 
         child_node1 = Node(chess.Board("1r4B1/p1p3k1/6p1/5R2/8/1Pb5/q1P2PP1/3K3R b - - 2 27"), root_node, chess.BLACK, 60, 100)
@@ -198,6 +198,51 @@ def main():
                 outcome = monte_carlo2.simulation(child)
                 print("outcome: " + str(outcome))
                 monte_carlo2.backpropagation(child, outcome)
+
+    # Tree 4 - Strong Loss, From Week-5/time2
+    if False:
+        root_node = Node(chess.Board("8/8/8/1p6/2b5/2kp4/8/4K3 w - - 0 171"), None, chess.WHITE, 0, 0)
+        for i in range(100):
+            print("test " + str(i + 1))
+            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            current = monte_carlo.selection()
+            if not current.is_end():
+                # print("current: " + str(current))
+                child = monte_carlo.expansion(current)
+                print("child: " + str(child))
+                outcome = monte_carlo.simulation(child)
+                print("outcome: " + str(outcome))
+                monte_carlo.backpropagation(child, outcome)
+
+    # Tree 5 - Strong Win, From Week-5/time6
+    if False:
+        root_node = Node(chess.Board("n7/P4r2/2P1N3/2K5/R7/6kP/8/8 w - - 1 69"), None, chess.WHITE, 0, 0)
+        for i in range(100):
+            print("test " + str(i + 1))
+            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            current = monte_carlo.selection()
+            if not current.is_end():
+                # print("current: " + str(current))
+                child = monte_carlo.expansion(current)
+                print("child: " + str(child))
+                outcome = monte_carlo.simulation(child)
+                print("outcome: " + str(outcome))
+                monte_carlo.backpropagation(child, outcome)
+
+    # Tree 6 - Strange Test Case, From Week-5/time6
+    if False:
+        root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0)
+        for i in range(100):
+            print("test " + str(i + 1))
+            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            current = monte_carlo.selection()
+            if not current.is_end():
+                # print("current: " + str(current))
+                child = monte_carlo.expansion(current)
+                print("child: " + str(child))
+                outcome = monte_carlo.simulation(child)
+                print("outcome: " + str(outcome))
+                monte_carlo.backpropagation(child, outcome)
 
 if __name__ == "__main__":
     main()
