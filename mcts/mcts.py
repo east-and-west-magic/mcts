@@ -54,4 +54,10 @@ class MonteCarloTreeSearch:
         return current_board.result()
 
     def backpropagation(self, current_node, outcome):
-        pass
+        while current_node:
+            if (current_node.player and outcome == "1-0") or (not current_node.player and outcome == "0-1"):
+                current_node.update_wins(1)
+            elif outcome == "1/2-1/2":
+                current_node.update_wins(0.5)
+            current_node.update_visits()
+            current_node = current_node.parent

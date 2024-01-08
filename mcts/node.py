@@ -12,8 +12,8 @@ class Node:
     def __str__(self):
         return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}, Player: {'White' if self.player else 'Black'}"
 
-    def update_wins(self):
-        self.wins += 1
+    def update_wins(self, value):
+        self.wins += value
 
     def update_visits(self):
         self.visits += 1
