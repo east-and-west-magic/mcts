@@ -184,15 +184,20 @@ def main():
                 # print(child)
             
         if True:
-            print("test 3")
-            monte_carlo = MonteCarloTreeSearch(root_node, 2)
-            monte_carlo.selection()
+            # print("test 3")
+            # monte_carlo = MonteCarloTreeSearch(root_node, 2)
+            # monte_carlo.selection()
 
-            print("test 4")
-            monte_carlo2 = MonteCarloTreeSearch(root_node, 1)
-            current = monte_carlo2.selection()
-            child = monte_carlo2.expansion(current)
-            monte_carlo2.simulation(child)
+            for i in range(5):
+                print("test " + str(i))
+                monte_carlo2 = MonteCarloTreeSearch(root_node, 1)
+                current = monte_carlo2.selection()
+                # print("current: " + str(current))
+                child = monte_carlo2.expansion(current)
+                print("child: " + str(child))
+                outcome = monte_carlo2.simulation(child)
+                print("outcome: " + str(outcome))
+                monte_carlo2.backpropagation(child, outcome)
 
 if __name__ == "__main__":
     main()

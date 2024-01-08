@@ -14,6 +14,7 @@ class MonteCarloTreeSearch:
     def selection(self):
         max_ucb = float("-inf")
         max_children = []
+        unvisited_children = []
         q = deque()
         q.append(self.root)
         while q:
@@ -21,19 +22,27 @@ class MonteCarloTreeSearch:
             if not currentNode.is_leaf():
                 for child in currentNode.children:
                     q.append(child)
+            elif currentNode.visits == 0:
+                # print(currentNode)
+                unvisited_children.append(currentNode)
             else:
-                print(currentNode)
+                # print(currentNode)
                 exploitation = currentNode.wins / currentNode.visits
                 exploration = self.c * math.sqrt(math.log(currentNode.parent.visits) / currentNode.visits)
-                print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
+                # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
                 if exploration + exploitation > max_ucb:
                     max_ucb = exploration + exploitation
                     max_children = [currentNode]
                 elif exploration + exploitation == max_ucb:
                     max_children.append(currentNode)
-        choice = random.choice(max_children)
-        print("Node: " + str(choice) + ", UCB: " + str(max_ucb))
-        return choice
+        if unvisited_children:
+            choice = random.choice(unvisited_children)
+            print("Node: " + str(choice) + ", no visits")
+            return choice
+        else:
+            choice = random.choice(max_children)
+            print("Node: " + str(choice) + ", UCB: " + str(max_ucb))
+            return choice
     
     def expansion(self, current_node):
         current_board = current_node.board
@@ -42,7 +51,7 @@ class MonteCarloTreeSearch:
             child_board.push(legal_move)
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0)
             current_node.add_child(child_node)
-            print(child_node)
+            # print(child_node)
         return random.choice(current_node.children) # just simulate one time
     
     def simulation(self, current_node):
@@ -50,7 +59,7 @@ class MonteCarloTreeSearch:
         while not current_board.is_game_over():
             move = random.choice(list(current_board.legal_moves))
             current_board.push(move)
-        print(current_board.result())
+        # print(current_board.result())
         return current_board.result()
 
     def backpropagation(self, current_node, outcome):
@@ -60,4 +69,5 @@ class MonteCarloTreeSearch:
             elif outcome == "1/2-1/2":
                 current_node.update_wins(0.5)
             current_node.update_visits()
+            print(current_node)
             current_node = current_node.parent
