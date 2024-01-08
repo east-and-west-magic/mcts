@@ -189,9 +189,10 @@ def main():
             monte_carlo.selection()
 
             print("test 4")
-            monte_carlo2 = MonteCarloTreeSearch(root_node, 100)
-            monte_carlo2.selection()
-            
+            monte_carlo2 = MonteCarloTreeSearch(root_node, 1)
+            current = monte_carlo2.selection()
+            child = monte_carlo2.expansion(current)
+            monte_carlo2.simulation(child)
 
 if __name__ == "__main__":
     main()

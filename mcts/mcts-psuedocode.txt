@@ -40,14 +40,16 @@ for fixed number of iterations / time constraint:
     set starting configuration = simulation node's chessboard state
     while chess game has not ended:
         choose random move from legal moves
-        play move
+        play one move
     set outcome = outcome of the game (win/lose/draw)
 
     # Backpropagation
-    set current node = simulation node
     while current node is not null:
         if (current node's player is white and outcome is win or current node's player is black and outcome is lose):
             add one to current node's wins
+        else if (draw):
+            add 1/2 to current node's wins
+            add 1/2 to parent's wins
         add one to current node's visits
         set current node = current node's parent node
 
@@ -58,6 +60,10 @@ wins + C * sqrt(ln(visits of parent node) / visits of child node)
 1. opponents will pick best move - it's minimax style
 2. exploration - neighborhood or random moves (most of exploration is picking random moves)
 3. promising moves - (e4/e5 and knights are promising, a3/a4 are not promising)
+
+How to handle a draw:
+1. ignore (but wasted simulation)
+2. assign half point to each node in path (better way)
 
 UCB formula is a combination of 2 and 3
 constant C (the bigger, the more exploration)

@@ -40,6 +40,18 @@ class MonteCarloTreeSearch:
         for legal_move in list(current_node.board.legal_moves):
             child_board = chess.Board(current_board.fen())
             child_board.push(legal_move)
-            child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 10)
+            child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0)
             current_node.add_child(child_node)
-            # simulate 10 times (so that visits will not be 0)
+            print(child_node)
+        return random.choice(current_node.children) # just simulate one time
+    
+    def simulation(self, current_node):
+        current_board = current_node.board
+        while not current_board.is_game_over():
+            move = random.choice(list(current_board.legal_moves))
+            current_board.push(move)
+        print(current_board.result())
+        return current_board.result()
+
+    def backpropagation(self, current_node, outcome):
+        pass
