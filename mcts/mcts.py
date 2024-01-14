@@ -72,3 +72,16 @@ class MonteCarloTreeSearch:
             current_node.update_visits()
             print(current_node)
             current_node = current_node.parent
+
+    def printTree(self):
+        print("Tree: ")
+        return self.printTreeHelper(self.root, 0)
+    
+    def printTreeHelper(self, node, level):
+        str = ""
+        for i in range(level):
+            str += "|   "
+        str += "|-- " + node.nodeRepresentation()
+        print(str)
+        for child in node.children:
+            self.printTreeHelper(child, level + 1)

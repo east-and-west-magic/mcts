@@ -27,5 +27,8 @@ class Node:
     
     def is_end(self):
         return self.end
+    
+    def nodeRepresentation(self):
+        return f"({self.wins}/{self.visits}, {self.board.fen()}) "
 
     

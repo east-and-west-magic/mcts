@@ -230,9 +230,9 @@ def main():
                 monte_carlo.backpropagation(child, outcome)
 
     # Tree 6 - Strange Test Case, From Week-5/time6
-    if False:
+    if True:
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0)
-        for i in range(100):
+        for i in range(10):
             print("test " + str(i + 1))
             monte_carlo = MonteCarloTreeSearch(root_node, 1)
             current = monte_carlo.selection()
@@ -243,6 +243,8 @@ def main():
                 outcome = monte_carlo.simulation(child)
                 print("outcome: " + str(outcome))
                 monte_carlo.backpropagation(child, outcome)
+            print()
+        monte_carlo.printTree()
 
 if __name__ == "__main__":
     main()
