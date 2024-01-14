@@ -37,7 +37,7 @@ class MonteCarloTreeSearch:
                     max_children.append(currentNode)
         if unvisited_children:
             choice = random.choice(unvisited_children)
-            print("Node: " + str(choice) + ", no visits")
+            print("Node: " + str(choice) + ", UCB: no visits")
             return choice
         else:
             choice = random.choice(max_children)
@@ -56,11 +56,12 @@ class MonteCarloTreeSearch:
             return random.choice(current_node.children) # just simulate one time
     
     def simulation(self, current_node):
-        current_board = current_node.board
+        current_board = chess.Board(current_node.board.fen())
         while not current_board.is_game_over():
             move = random.choice(list(current_board.legal_moves))
             current_board.push(move)
         # print(current_board.result())
+        # print(current_node)
         return current_board.result()
 
     def backpropagation(self, current_node, outcome):
@@ -70,7 +71,7 @@ class MonteCarloTreeSearch:
             elif outcome == "1/2-1/2":
                 current_node.update_wins(0.5)
             current_node.update_visits()
-            print(current_node)
+            print("- " + str(current_node))
             current_node = current_node.parent
 
     def printTree(self):
