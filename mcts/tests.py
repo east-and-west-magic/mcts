@@ -3,6 +3,7 @@ import chess.svg
 import chess.engine
 from node import Node
 from mcts import MonteCarloTreeSearch
+from tqdm import tqdm
 
 
 def main():
@@ -231,21 +232,23 @@ def main():
 
     # Tree 6 - Strange Test Case, From Week-5/time6
     if True:
-        root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0)
-        for i in range(10000):
+        root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0, None)
+        for i in tqdm(range(10000)):
             print("Test " + str(i + 1) + ":")
             monte_carlo = MonteCarloTreeSearch(root_node, 1)
             current = monte_carlo.selection()
             if not current.is_end():
                 # print("current: " + str(current))
                 child = monte_carlo.expansion(current)
-                print("Random Child Chosen: " + str(child))
+                #nprint("Random Child Chosen: " + str(child))
                 outcome = monte_carlo.simulation(child)
-                print("Simulation Outcome: " + str(outcome))
-                print("Backpropagation Path:")
+                # print("Simulation Outcome: " + str(outcome))
+                # print("Backpropagation Path:")
                 monte_carlo.backpropagation(child, outcome)
-            print()
-        monte_carlo.printTree()
+            # print()
+            monte_carlo.mostPromisingMoves()
+
+        # print most promising path and see if it converges to chess engine's moves
 
 if __name__ == "__main__":
     main()

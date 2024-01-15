@@ -1,13 +1,14 @@
 import chess
 
 class Node:
-    def __init__(self, board, parent, player, wins, visits):
+    def __init__(self, board, parent, player, wins, visits, move):
         self.board = board
         self.player = player
         self.parent = parent
         self.children = []
         self.wins = wins
         self.visits = visits
+        self.move = move
         self.end = board.is_game_over()
 
     def __str__(self):
