@@ -23,10 +23,8 @@ class MonteCarloTreeSearch:
                 for child in currentNode.children:
                     q.append(child)
             elif currentNode.visits == 0:
-                # print(currentNode)
                 unvisited_children.append(currentNode)
             else:
-                # print(currentNode)
                 exploitation = currentNode.wins / currentNode.visits
                 exploration = self.c * math.sqrt(math.log(currentNode.parent.visits) / currentNode.visits)
                 # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
@@ -51,7 +49,6 @@ class MonteCarloTreeSearch:
             child_board.push(legal_move)
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, legal_move)
             current_node.add_child(child_node)
-            # print(child_node)
         if current_node.children: # how to deal with
             return random.choice(current_node.children) # just simulate one time
     
@@ -60,8 +57,6 @@ class MonteCarloTreeSearch:
         while not current_board.is_game_over():
             move = random.choice(list(current_board.legal_moves))
             current_board.push(move)
-        # print(current_board.result())
-        # print(current_node)
         return current_board.result()
 
     def backpropagation(self, current_node, outcome):
@@ -71,7 +66,6 @@ class MonteCarloTreeSearch:
             elif outcome == "1/2-1/2":
                 current_node.update_wins(0.5)
             current_node.update_visits()
-            # print("- " + str(current_node))
             current_node = current_node.parent
 
     def printTree(self):
@@ -89,7 +83,6 @@ class MonteCarloTreeSearch:
     
     def mostPromisingMoves(self):
         current_node = self.root
-        # print("Step 1: " + str(current_node))
         i = 1
         while not current_node.is_leaf():
             max_children = []
@@ -97,9 +90,7 @@ class MonteCarloTreeSearch:
             for child in current_node.children:
                 if child.visits != 0:
                     exploitation = child.wins / child.visits
-                    # print("exploitation: " + str(exploitation))
                     exploration = self.c * math.sqrt(math.log(current_node.visits) / child.visits)
-                    # print("exploration: " + str(exploration))
                     # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
                     if exploration + exploitation > max_ucb:
                         max_ucb = exploration + exploitation
@@ -107,7 +98,7 @@ class MonteCarloTreeSearch:
                     elif exploration + exploitation == max_ucb:
                         max_children.append(child)
             choice = random.choice(max_children)
-            print("Step " + str(i) + ": " + str(choice.move))
+            print("Step " + str(i) + ": " + str(choice.move) + ", UCB: " + str(max_ucb))
             i += 1
             current_node = choice
         

@@ -238,17 +238,14 @@ def main():
             monte_carlo = MonteCarloTreeSearch(root_node, 1)
             current = monte_carlo.selection()
             if not current.is_end():
-                # print("current: " + str(current))
                 child = monte_carlo.expansion(current)
-                #nprint("Random Child Chosen: " + str(child))
                 outcome = monte_carlo.simulation(child)
-                # print("Simulation Outcome: " + str(outcome))
-                # print("Backpropagation Path:")
                 monte_carlo.backpropagation(child, outcome)
-            # print()
             monte_carlo.mostPromisingMoves()
 
         # print most promising path and see if it converges to chess engine's moves
+        # tail -f a.txt
+        # grep f5f7 a.txt| wc
 
 if __name__ == "__main__":
     main()
