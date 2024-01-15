@@ -205,7 +205,7 @@ def main():
         root_node = Node(chess.Board("8/8/8/1p6/2b5/2kp4/8/4K3 w - - 0 171"), None, chess.WHITE, 0, 0)
         for i in range(100):
             print("test " + str(i + 1))
-            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            monte_carlo = MonteCarloTreeSearch(root_node, 100)
             current = monte_carlo.selection()
             if not current.is_end():
                 # print("current: " + str(current))
@@ -220,7 +220,7 @@ def main():
         root_node = Node(chess.Board("n7/P4r2/2P1N3/2K5/R7/6kP/8/8 w - - 1 69"), None, chess.WHITE, 0, 0)
         for i in range(100):
             print("test " + str(i + 1))
-            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            monte_carlo = MonteCarloTreeSearch(root_node, 100)
             current = monte_carlo.selection()
             if not current.is_end():
                 # print("current: " + str(current))
@@ -235,7 +235,7 @@ def main():
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0, None)
         for i in tqdm(range(20_000)):
             print("Test " + str(i + 1) + ":")
-            monte_carlo = MonteCarloTreeSearch(root_node, 1)
+            monte_carlo = MonteCarloTreeSearch(root_node, 100)
             current = monte_carlo.selection()
             if not current.is_end():
                 child = monte_carlo.expansion(current)
