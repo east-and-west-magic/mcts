@@ -232,7 +232,7 @@ def main():
     # Tree 6 - Strange Test Case, From Week-5/time6
     if True:
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0)
-        for i in range(10):
+        for i in range(10000):
             print("Test " + str(i + 1) + ":")
             monte_carlo = MonteCarloTreeSearch(root_node, 1)
             current = monte_carlo.selection()
