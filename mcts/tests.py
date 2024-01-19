@@ -232,16 +232,116 @@ def main():
 
     # Tree 6 - Strange Test Case, From Week-5/time6
     if True:
+        import random
+        random.seed(123)
+
         root_node = Node(chess.Board("1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"), None, chess.WHITE, 0, 0, None)
-        for i in tqdm(range(20_000)):
+        monte_carlo = MonteCarloTreeSearch(root_node, 1)
+
+        # for i in tqdm(range(10)):
+        for i in tqdm(range(100)):
             print("Test " + str(i + 1) + ":")
-            monte_carlo = MonteCarloTreeSearch(root_node, 100)
-            current = monte_carlo.selection()
-            if not current.is_end():
-                child = monte_carlo.expansion(current)
-                outcome = monte_carlo.simulation(child)
-                monte_carlo.backpropagation(child, outcome)
-            monte_carlo.mostPromisingMoves()
+            r = random.choice(range(100))
+            if i == 100:
+                pass
+            if r < 11111:
+                selected_node = root_node
+                not_found = False
+                # level 1
+                while not selected_node.is_end():
+                    x = selected_node
+                    if "f5f7" in [str(n.move) for n in x.children]:
+                        for n in x.children:
+                            if str(n.move) == "f5f7":
+                                selected_node = n
+                    else:
+                        not_found = True
+                        break
+                    # level 2
+                    x = selected_node
+                    if "g7g8" in [str(n.move) for n in x.children]:
+                        for n in x.children:
+                            if str(n.move) == "g7g8":
+                                selected_node = n
+                    else:
+                        not_found = True
+                        break
+                    # level 3
+                    x = selected_node
+                    if "f7f5" in [str(n.move) for n in x.children]:
+                        for n in x.children:
+                            if str(n.move) == "f7f5":
+                                selected_node = n
+                    else:
+                        not_found = True
+                        break
+                    # level 4
+                    x = selected_node
+                    if "g8g7" in [str(n.move) for n in x.children]:
+                        for n in x.children:
+                            if str(n.move) == "g8g7":
+                                selected_node = n
+                    else:
+                        not_found = True
+                        break
+
+                current = selected_node
+
+                moves = []
+                tmp = current
+                while tmp.move is not None:
+                    moves.append(tmp.move)
+                    tmp = tmp.parent
+                for level, move in enumerate(reversed(moves)):
+                    print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
+
+                if current.is_end():
+                    current_board = chess.Board(current.board.fen())
+                    assert current_board.is_game_over()
+                    outcome = current_board.result()
+                    monte_carlo.backpropagation(current, outcome)
+                else:
+                    child = monte_carlo.expansion(current)
+                    outcome = monte_carlo.simulation(child)
+                    monte_carlo.backpropagation(child, outcome)
+            else:
+                current = monte_carlo.selection()
+                if current.is_end():
+                    current_board = chess.Board(current.board.fen())
+                    assert current_board.is_game_over()
+                    outcome = current_board.result()
+                    monte_carlo.backpropagation(current, outcome)
+                else:
+                    child = monte_carlo.expansion(current)
+                    outcome = monte_carlo.simulation(child)
+                    monte_carlo.backpropagation(child, outcome)
+
+            ###################### 
+            moves = []
+            tmp = child
+            while tmp.move is not None:
+                moves.append(tmp.move)
+                tmp = tmp.parent
+            for level, move in enumerate(reversed(moves)):
+                print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
+
+            if True:
+                if "f5f7" in [str(m) for m in reversed(moves)][:1]:
+                    monte_carlo.printTree()
+                elif i < 20:
+                    monte_carlo.printTree()
+                elif i < 200:
+                    if (i+1) % 10 == 0:
+                        monte_carlo.printTree()
+                elif i < 2000:
+                    if (i+1) % 100 == 0:
+                        monte_carlo.printTree()
+                else:
+                    if (i+1) % 1_000 == 0:
+                        monte_carlo.printTree()
+            ###################### 
+
+            print("")
 
         # print most promising path and see if it converges to chess engine's moves
         # tail -f a.txt

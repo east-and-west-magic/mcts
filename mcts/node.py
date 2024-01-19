@@ -30,6 +30,14 @@ class Node:
         return self.end
     
     def nodeRepresentation(self):
-        return f"({self.wins}/{self.visits}, {self.board.fen()}) "
+        moves = []
+        tmp = self
+        while tmp.move is not None:
+            moves.append(tmp.move)
+            tmp = tmp.parent
+        for level, move in enumerate(reversed(moves)):
+            # print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
+            pass
 
+        return f"({self.wins/self.visits:.4f}, {1-self.wins/self.visits:.4f}, {self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
     

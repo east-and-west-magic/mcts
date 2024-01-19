@@ -11,7 +11,39 @@ class MonteCarloTreeSearch:
         self.root = root_node
         self.c = c
     
+
     def selection(self):
+        current = self.root
+        while not current.is_leaf():
+            max_ucb = float("-inf")
+            selected_child = None
+            max_children = []
+            unvisited_children = []
+            for child in current.children:
+                if child.visits == 0:
+                    unvisited_children.append(child)
+                else:
+                    a = child.wins/child.visits 
+                    if not child.player:
+                        a = 1 - a
+                    b = self.c * math.sqrt(math.log(current.visits) / child.visits)
+                    child_ucb = a + b 
+                    if child_ucb > max_ucb:
+                        max_children = []
+                        max_children.append(child)
+                        max_ucb = child_ucb
+                    elif child_ucb == max_ucb:
+                        max_children.append(child)
+                if unvisited_children:
+                    selected_child = random.choice(unvisited_children)
+                else:
+                    selected_child = random.choice(max_children)
+            current = selected_child
+            # print(current)
+        return current
+        
+
+    def selection2(self):
         max_ucb = float("-inf")
         max_children = []
         unvisited_children = []
@@ -35,6 +67,7 @@ class MonteCarloTreeSearch:
                     max_children.append(currentNode)
         if unvisited_children:
             choice = random.choice(unvisited_children)
+            assert False
             # print("Node: " + str(choice) + ", UCB: no visits")
             return choice
         else:
@@ -73,14 +106,19 @@ class MonteCarloTreeSearch:
         return self.printTreeHelper(self.root, 0)
     
     def printTreeHelper(self, node, level):
+        if level >= 2:
+            pass
+        if node.visits == 0:
+            return
+
         str = ""
         for i in range(level):
             str += "|   "
         str += "|-- " + node.nodeRepresentation()
         print(str)
         for child in node.children:
-            self.printTreeHelper(child, level + 1)
-    
+            self.printTreeHelper(child, level + 1)        
+
     def mostPromisingMoves(self):
         current_node = self.root
         i = 1
@@ -92,13 +130,19 @@ class MonteCarloTreeSearch:
                     exploitation = child.wins / child.visits
                     exploration = self.c * math.sqrt(math.log(current_node.visits) / child.visits)
                     # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
+                    info = (
+                        exploitation, 
+                        (child.wins, child.visits), 
+                        exploration,
+                        (current_node.visits, child.visits)
+                    )
                     if exploration + exploitation > max_ucb:
                         max_ucb = exploration + exploitation
-                        max_children = [child]
+                        max_children = [(child, info)]
                     elif exploration + exploitation == max_ucb:
-                        max_children.append(child)
-            choice = random.choice(max_children)
-            print("Step " + str(i) + ": " + str(choice.move) + ", UCB: " + str(max_ucb))
+                        max_children.append((child, info))
+            choice, info = random.choice(max_children)
+            print("Step " + str(i) + ": " + str(choice.move) + ", UCB: " + str(max_ucb), info)
             i += 1
             current_node = choice
         
