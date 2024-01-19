@@ -20,6 +20,8 @@ class MonteCarloTreeSearch:
             max_children = []
             unvisited_children = []
             for child in current.children:
+                if str(child.move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
+                    continue
                 if child.visits == 0:
                     unvisited_children.append(child)
                 else:
@@ -78,12 +80,16 @@ class MonteCarloTreeSearch:
     def expansion(self, current_node):
         current_board = current_node.board
         for legal_move in list(current_node.board.legal_moves):
+            if str(legal_move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
+                continue
             child_board = chess.Board(current_board.fen())
             child_board.push(legal_move)
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, legal_move)
             current_node.add_child(child_node)
         if current_node.children: # how to deal with
             return random.choice(current_node.children) # just simulate one time
+        else:
+            return None
     
     def simulation(self, current_node):
         current_board = chess.Board(current_node.board.fen())

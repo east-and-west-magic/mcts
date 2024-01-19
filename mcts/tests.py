@@ -241,78 +241,18 @@ def main():
         # for i in tqdm(range(10)):
         for i in tqdm(range(100)):
             print("Test " + str(i + 1) + ":")
-            r = random.choice(range(100))
-            if i == 100:
-                pass
-            if r < 11111:
-                selected_node = root_node
-                not_found = False
-                # level 1
-                while not selected_node.is_end():
-                    x = selected_node
-                    if "f5f7" in [str(n.move) for n in x.children]:
-                        for n in x.children:
-                            if str(n.move) == "f5f7":
-                                selected_node = n
-                    else:
-                        not_found = True
-                        break
-                    # level 2
-                    x = selected_node
-                    if "g7g8" in [str(n.move) for n in x.children]:
-                        for n in x.children:
-                            if str(n.move) == "g7g8":
-                                selected_node = n
-                    else:
-                        not_found = True
-                        break
-                    # level 3
-                    x = selected_node
-                    if "f7f5" in [str(n.move) for n in x.children]:
-                        for n in x.children:
-                            if str(n.move) == "f7f5":
-                                selected_node = n
-                    else:
-                        not_found = True
-                        break
-                    # level 4
-                    x = selected_node
-                    if "g8g7" in [str(n.move) for n in x.children]:
-                        for n in x.children:
-                            if str(n.move) == "g8g7":
-                                selected_node = n
-                    else:
-                        not_found = True
-                        break
-
-                current = selected_node
-
-                moves = []
-                tmp = current
-                while tmp.move is not None:
-                    moves.append(tmp.move)
-                    tmp = tmp.parent
-                for level, move in enumerate(reversed(moves)):
-                    print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
-
-                if current.is_end():
-                    current_board = chess.Board(current.board.fen())
-                    assert current_board.is_game_over()
-                    outcome = current_board.result()
-                    monte_carlo.backpropagation(current, outcome)
-                else:
-                    child = monte_carlo.expansion(current)
-                    outcome = monte_carlo.simulation(child)
-                    monte_carlo.backpropagation(child, outcome)
+            current = monte_carlo.selection()
+            if current.is_end():
+                current_board = chess.Board(current.board.fen())
+                assert current_board.is_game_over()
+                outcome = monte_carlo.simulation(current)
+                monte_carlo.backpropagation(current, outcome)
             else:
-                current = monte_carlo.selection()
-                if current.is_end():
-                    current_board = chess.Board(current.board.fen())
-                    assert current_board.is_game_over()
-                    outcome = current_board.result()
+                child = monte_carlo.expansion(current)
+                if child is None:
+                    outcome = monte_carlo.simulation(current)
                     monte_carlo.backpropagation(current, outcome)
                 else:
-                    child = monte_carlo.expansion(current)
                     outcome = monte_carlo.simulation(child)
                     monte_carlo.backpropagation(child, outcome)
 
