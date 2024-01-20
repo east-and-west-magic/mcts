@@ -40,7 +40,7 @@ class Node:
         return self.board.is_game_over()
         # return self.end
     
-    def nodeRepresentation(self):
+    def nodeRepresentation(self, c):
         # nodes = self.path()
         n = self
         if n.parent is None:
@@ -53,7 +53,7 @@ class Node:
         if n.visits > 0:
                 import math
                 a = 1 - n.wins / n.visits
-                b = math.sqrt(2*math.log(n.parent.visits) / n.visits)
+                b = c * math.sqrt(2*math.log(n.parent.visits) / n.visits)
                 return \
                 f"ucb: {a + b:.4f} (({n.visits-n.wins}/{n.visits}) {a:.4f}+{b:.4f}), " \
                 f"[{n.move}], " \

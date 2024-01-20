@@ -29,7 +29,7 @@ class MonteCarloTreeSearch:
                     a = child.wins/child.visits 
                     if not child.player:
                         a = 1 - a
-                    b = self.c * math.sqrt(math.log(current.visits) / child.visits)
+                    b = self.c * math.sqrt(2*math.log(current.visits) / child.visits)
                     child_ucb = a + b 
                     if child_ucb > max_ucb:
                         max_children = []
