@@ -129,7 +129,8 @@ class MonteCarloTreeSearch:
             if child.visits > 0:
                 a = child.wins/child.visits
                 b = self.c * math.sqrt(2*math.log(node.visits)/child.visits)
-                children2.append((1 - a + b, child))
+                # children2.append((1 - a + b, child))
+                children2.append((1 - a, child))
             else:
                 children2.append((0, child))
 

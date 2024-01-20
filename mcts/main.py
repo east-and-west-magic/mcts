@@ -15,21 +15,22 @@ def main():
 
         pass
 
-        fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
+        # fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
         # fen = "2k5/8/2K5/Q7/8/8/8/8 w - - 0 1"
         # fen = "1k6/8/3K4/Q7/8/8/8/8 w - - 0 1"
         # fen = "8/k7/3K4/8/1Q6/8/8/8 w - - 0 1"
+    
         # fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1"
 
         # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3"
         # fen = "3k4/8/3K4/3P4/8/8/8/8 w - - 0 1"
         # fen = "8/6p1/5p2/5P2/4k1KP/8/8/8 w - - 0 1"
-        # fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"
+        fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"
         root_node = Node(chess.Board(fen), None, chess.WHITE, 0, 0, None)
-        monte_carlo = MonteCarloTreeSearch(root_node, 1)
+        monte_carlo = MonteCarloTreeSearch(root_node, 3)
 
         # for i in tqdm(range(10)):
-        for i in tqdm(range(1_000)):
+        for i in tqdm(range(1_000_000)):
             if i == 23:
                 pass
 
@@ -78,8 +79,8 @@ def main():
                         f"ucb: {a + b:.4f} ({a:.4f}+{b:.4f}),",
                         f"winrate: {1-n.wins/n.visits},",
                         f"win: {n.visits-n.wins},",
-                        f"pvisits: {n.parent.visits},", 
                         f"visits: {n.visits},", 
+                        f"pvisits: {n.parent.visits},", 
                         f"path: {[str(n.move) for n in nodes]}"
                     )
                 else:
