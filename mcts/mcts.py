@@ -122,7 +122,7 @@ class MonteCarloTreeSearch:
         str = ""
         for i in range(level):
             str += "|   "
-        str += "|-- " + f"[{index}] " + node.nodeRepresentation()
+        str += "|-- " + f"[{index}] " + node.nodeRepresentation(self.c)
         print(str)
         children2 = []
         for child in node.children:
