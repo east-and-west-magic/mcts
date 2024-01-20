@@ -128,7 +128,7 @@ class MonteCarloTreeSearch:
         for child in node.children:
             if child.visits > 0:
                 a = child.wins/child.visits
-                b = self.c * math.sqrt(math.log(2*node.visits)/child.visits)
+                b = self.c * math.sqrt(2*math.log(node.visits)/child.visits)
                 children2.append((1 - a + b, child))
             else:
                 children2.append((0, child))
@@ -136,7 +136,7 @@ class MonteCarloTreeSearch:
         from operator import itemgetter
         first_item = itemgetter(0)
         children3 = sorted(children2, key = first_item, reverse=False)                
-        for index, (winrate, child) in enumerate(children3):
+        for index, (ucb, child) in enumerate(children3):
             self.printTreeHelper(child, level + 1, index)
 
     def mostPromisingMoves(self):
