@@ -20,8 +20,9 @@ class MonteCarloTreeSearch:
             max_children = []
             unvisited_children = []
             for child in current.children:
-                if str(child.move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
-                    continue
+                # if str(child.move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
+                if str(child.move) not in ['g4h5', 'e4f5']:
+                    pass
                 if child.visits == 0:
                     unvisited_children.append(child)
                 else:
@@ -80,8 +81,9 @@ class MonteCarloTreeSearch:
     def expansion(self, current_node):
         current_board = current_node.board
         for legal_move in list(current_node.board.legal_moves):
-            if str(legal_move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
-                continue
+            # if str(legal_move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
+            if str(legal_move) not in ['g4h5', 'e4f5']:                
+                pass
             child_board = chess.Board(current_board.fen())
             child_board.push(legal_move)
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, legal_move)
@@ -113,7 +115,7 @@ class MonteCarloTreeSearch:
     
     def printTreeHelper(self, node, level):
         if level >= 2:
-            pass
+            return
         if node.visits == 0:
             pass
 

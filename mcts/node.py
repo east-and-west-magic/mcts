@@ -39,5 +39,8 @@ class Node:
             # print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
             pass
 
-        return f"({self.wins/self.visits:.4f}, {1-self.wins/self.visits:.4f}, {self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
+        if self.visits == 0:
+            return f"({self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
+        else:
+            return f"({self.wins/self.visits:.4f}, {1-self.wins/self.visits:.4f}, {self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
     
