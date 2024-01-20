@@ -115,7 +115,7 @@ class MonteCarloTreeSearch:
         if level >= 2:
             pass
         if node.visits == 0:
-            return
+            pass
 
         str = ""
         for i in range(level):
