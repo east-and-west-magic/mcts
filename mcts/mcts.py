@@ -85,8 +85,8 @@ class MonteCarloTreeSearch:
             if str(legal_move) not in ['g4h5', 'e4f5']:                
                 pass
             child_board = chess.Board(current_board.fen())
+            child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
             child_board.push(legal_move)
-            child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, legal_move)
             current_node.add_child(child_node)
         if current_node.children: # how to deal with
             return random.choice(current_node.children) # just simulate one time

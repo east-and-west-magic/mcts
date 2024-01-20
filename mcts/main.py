@@ -15,11 +15,12 @@ def main():
 
         pass
 
-        # fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
+        fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
         # fen = "2k5/8/2K5/Q7/8/8/8/8 w - - 0 1"
         # fen = "1k6/8/3K4/Q7/8/8/8/8 w - - 0 1"
         # fen = "8/k7/3K4/8/1Q6/8/8/8 w - - 0 1"
-        fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1"
+        # fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1"
+
         # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3"
         # fen = "3k4/8/3K4/3P4/8/8/8/8 w - - 0 1"
         # fen = "8/6p1/5p2/5P2/4k1KP/8/8/8 w - - 0 1"
@@ -28,7 +29,7 @@ def main():
         monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
         # for i in tqdm(range(10)):
-        for i in tqdm(range(1_000_000)):
+        for i in tqdm(range(1_000)):
             if i == 23:
                 pass
 
