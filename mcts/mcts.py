@@ -111,9 +111,9 @@ class MonteCarloTreeSearch:
 
     def printTree(self):
         print("Tree: ")
-        return self.printTreeHelper(self.root, 0)
+        return self.printTreeHelper(self.root, 0, 0)
     
-    def printTreeHelper(self, node, level):
+    def printTreeHelper(self, node, level, index):
         if level >= 2:
             return
         if node.visits == 0:
@@ -122,21 +122,22 @@ class MonteCarloTreeSearch:
         str = ""
         for i in range(level):
             str += "|   "
-        str += "|-- " + node.nodeRepresentation()
+        str += "|-- " + f"[{index}] " + node.nodeRepresentation()
         print(str)
         children2 = []
         for child in node.children:
             if child.visits > 0:
-                winrate = child.wins/child.visits
-                children2.append((1-winrate, child))
+                a = child.wins/child.visits
+                b = self.c * math.sqrt(math.log(2*node.visits)/child.visits)
+                children2.append((1 - a + b, child))
             else:
                 children2.append((0, child))
 
         from operator import itemgetter
         first_item = itemgetter(0)
-        children3 = sorted(children2, key = first_item, reverse=True)                
-        for winrate, child in children3:
-            self.printTreeHelper(child, level + 1)        
+        children3 = sorted(children2, key = first_item, reverse=False)                
+        for index, (winrate, child) in enumerate(children3):
+            self.printTreeHelper(child, level + 1, index)
 
     def mostPromisingMoves(self):
         current_node = self.root
