@@ -124,7 +124,18 @@ class MonteCarloTreeSearch:
             str += "|   "
         str += "|-- " + node.nodeRepresentation()
         print(str)
+        children2 = []
         for child in node.children:
+            if child.visits > 0:
+                winrate = child.wins/child.visits
+                children2.append((1-winrate, child))
+            else:
+                children2.append((0, child))
+
+        from operator import itemgetter
+        first_item = itemgetter(0)
+        children3 = sorted(children2, key = first_item, reverse=True)                
+        for winrate, child in children3:
             self.printTreeHelper(child, level + 1)        
 
     def mostPromisingMoves(self):
@@ -136,7 +147,7 @@ class MonteCarloTreeSearch:
             for child in current_node.children:
                 if child.visits != 0:
                     exploitation = child.wins / child.visits
-                    exploration = self.c * math.sqrt(math.log(current_node.visits) / child.visits)
+                    exploration = self.c * math.sqrt(2*math.log(current_node.visits) / child.visits)
                     # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
                     info = (
                         exploitation, 

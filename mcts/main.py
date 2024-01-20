@@ -66,13 +66,31 @@ def main():
                     monte_carlo.backpropagation(child, outcome)
 
             ###################### 
-            moves = []
-            tmp = node_log
-            while tmp.move is not None:
-                moves.append(str(tmp.move))
-                tmp = tmp.parent
-            for level, move in enumerate(reversed(moves)):
-                print(f"[steve] level: {level+1} move: {move} path: {[str(m) for m in reversed(moves)]}")
+            nodes = node_log.path()
+            for level, n in enumerate(nodes):
+                if n.visits > 0:
+                        import math
+                        a = 1 - n.wins / n.visits
+                        b = math.sqrt(2*math.log(n.parent.visits) / n.visits)
+                        print(
+                        f"[steve] level: {level+1},",
+                        f"move: {n.move},",
+                        f"ucb: {a + b:.4f} ({a:.4f}+{b:.4f}),",
+                        f"winrate: {1-n.wins/n.visits},",
+                        f"win: {n.visits-n.wins},",
+                        f"pvisits: {n.parent.visits},", 
+                        f"visits: {n.visits},", 
+                        f"path: {[str(n.move) for n in nodes]}"
+                    )
+                else:
+                    print(
+                        f"[steve] level: {level+1},",
+                        f"move: {n.move},",
+                        # f"winrate: {1-n.wins/n.visits},",
+                        f"win: {n.visits-n.wins},",
+                        f"visits: {n.visits},", 
+                        f"path: {[str(n.move) for n in nodes]}"
+                    )
 
             monte_carlo.printTree()
 
