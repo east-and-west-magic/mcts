@@ -5,6 +5,7 @@ import random
 import math
 from node import Node
 from collections import deque
+from operator import itemgetter
 
 class MonteCarloTreeSearch:
     def __init__(self, root_node, c):
@@ -111,9 +112,44 @@ class MonteCarloTreeSearch:
 
     def printTree(self):
         print("Tree: ")
-        return self.printTreeHelper(self.root, 0, 0)
+        return self.printTreeHelper(self.root, 0, 0, 0)
     
-    def printTreeHelper(self, node, level, index):
+    def sort_children_by(self, node, ucb=True):
+        """ 
+        given a node, sort its children by ucb or win_rate
+        return a sorted list of form (index, child) if not ucb
+        else return a dict of form {move: index}
+        """
+        res = []
+        for child in node.children:
+            if child.visits > 0:
+                a = child.wins/child.visits
+                b = self.c * math.sqrt(2*math.log(node.visits)/child.visits)
+                if ucb:
+                    # sort by ucb
+                    res.append((1 - a + b, child))
+                else:
+                    # sort by win_rate
+                    res.append((1 - a, child))
+            else:
+                res.append((0, child))
+
+        first_item = itemgetter(0)
+        res2 = sorted(res, key = first_item, reverse=True)                
+
+        if not ucb:
+            res3 = []
+            for index, (_, child) in enumerate(res2):
+                res3.append([index, child])
+        else:
+            res3 = {}
+            for index, (_, child) in enumerate(res2):
+                res3[child.move] = index
+
+        return res3
+
+
+    def printTreeHelper(self, node, level, index_ucb, index_win_rate):
         if level >= 2:
             return
         if node.visits == 0:
@@ -122,23 +158,14 @@ class MonteCarloTreeSearch:
         str = ""
         for i in range(level):
             str += "|   "
-        str += "|-- " + f"[{index}] " + node.nodeRepresentation(self.c)
+        str += "|-- " + f"[[{index_ucb}/{index_win_rate}]] " + node.nodeRepresentation(self.c)
         print(str)
-        children2 = []
-        for child in node.children:
-            if child.visits > 0:
-                a = child.wins/child.visits
-                b = self.c * math.sqrt(2*math.log(node.visits)/child.visits)
-                # children2.append((1 - a + b, child))
-                children2.append((1 - a, child))
-            else:
-                children2.append((0, child))
 
-        from operator import itemgetter
-        first_item = itemgetter(0)
-        children3 = sorted(children2, key = first_item, reverse=False)                
-        for index, (ucb, child) in enumerate(children3):
-            self.printTreeHelper(child, level + 1, index)
+        children_ucb = self.sort_children_by(node, True)
+        children_win_rate = self.sort_children_by(node, False)
+
+        for (index_tmp, child_tmp) in reversed(children_win_rate):
+            self.printTreeHelper(child_tmp, level + 1, index_tmp, children_ucb[child_tmp.move])
 
     def mostPromisingMoves(self):
         current_node = self.root
