@@ -10,6 +10,10 @@ def main():
     import random
     random.seed(123)
 
+    n_simu = 100
+    n_mcts = 100
+    n_show = 1
+
     # Tree 6 - Strange Test Case, From Week-5/time6
     if True:
 
@@ -20,7 +24,8 @@ def main():
     
         # fen = "8/8/8/1R6/2K5/8/k7/8 w - - 0 1" # rook ending DTM: 4
         # fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # BUG: Rb2
-        fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # rook ending DTM: 1 or draw
+        fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending DTD: 1
+        # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # rook ending DTM: 1 or draw
         # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
 
         # fen = "8/1Q1K4/8/8/k7/8/8/8 w - - 0 1" # queen ending DTM: 6
@@ -42,12 +47,8 @@ def main():
         root_node = Node(chess.Board(fen), None, chess.WHITE, 0, 0, None)
         monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
-
-        n_simu = 100
-        n_mcts = 1_000_000
-        n_show = 100
         for i in tqdm(range(n_mcts)):
-            if i == 23:
+            if (i == 79) or (i == 30):
                 pass
 
             print("Test " + str(i + 1) + ":")

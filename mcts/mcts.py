@@ -28,8 +28,9 @@ class MonteCarloTreeSearch:
                     unvisited_children.append(child)
                 else:
                     a = child.wins/child.visits 
-                    if not child.player:
+                    if child.player:
                         a = 1 - a
+                        # pass
                     b = self.c * math.sqrt(2*math.log(current.visits) / child.visits)
                     child_ucb = a + b 
                     if child_ucb > max_ucb:
@@ -150,7 +151,7 @@ class MonteCarloTreeSearch:
 
 
     def printTreeHelper(self, node, level, index_ucb, index_win_rate):
-        if level >= 2:
+        if level >= 3:
             return
         if node.visits == 0:
             pass
