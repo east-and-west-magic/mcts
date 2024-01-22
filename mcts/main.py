@@ -24,12 +24,15 @@ def main():
     
         ##################################################################
         # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending DTD: 1, Kxb2 draw
-        fen = "8/8/8/1R6/2K5/8/k7/8 w - - 0 1" # rook ending DTM: 4, Kc3 win within 10 min
+        # fen = "8/8/8/1R6/2K5/8/k7/8 w - - 0 1" # rook ending DTM: 4, Kc3 win within 10 min
+
+        # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending. DTD: 1
+        # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # same as above, black to move
+
         # fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG: Rb2 lose
         ##################################################################
 
-        # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # rook ending DTM: 1 or draw
-        # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
+        fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
 
         # fen = "8/1Q1K4/8/8/k7/8/8/8 w - - 0 1" # queen ending DTM: 6
         # fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1" # queen ending DTM: 10

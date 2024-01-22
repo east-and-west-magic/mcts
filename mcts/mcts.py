@@ -128,6 +128,7 @@ class MonteCarloTreeSearch:
 
     def printTree(self, limit):
         print("Tree: ")
+        self.pindex_ucb = []
         return self.printTreeHelper(self.root, 0, 0, 0, limit)
     
     def sort_children_by(self, node, ucb=True):
@@ -166,7 +167,9 @@ class MonteCarloTreeSearch:
         return res3
 
 
-    def printTreeHelper(self, node, level, index_ucb, index_win_rate, limit):
+    def printTreeHelper(self, node, level, index_win_rate, index_ucb, limit):
+        # global pindex_ucb
+
         if level >= limit:
             return
         if node.visits == 0:
@@ -175,14 +178,17 @@ class MonteCarloTreeSearch:
         str = ""
         for i in range(level):
             str += "|   "
-        str += "|-- " + f"[[{index_ucb}/{index_win_rate}]] " + node.nodeRepresentation(self.c)
+        str += "|-- " + f"[[{index_win_rate}:{index_ucb}] [{len(self.pindex_ucb)} {'/'.join(self.pindex_ucb)}]] " + node.nodeRepresentation(self.c)
         print(str)
 
         children_ucb = self.sort_children_by(node, True)
         children_win_rate = self.sort_children_by(node, False)
 
-        for (index_tmp, child_tmp) in reversed(children_win_rate):
-            self.printTreeHelper(child_tmp, level + 1, index_tmp, children_ucb[child_tmp.move], limit)
+        for (index1, child_tmp) in reversed(children_win_rate):
+            index2 = children_ucb[child_tmp.move]
+            self.pindex_ucb.append(f"{index2}")
+            self.printTreeHelper(child_tmp, level + 1, index1, index2, limit)
+            self.pindex_ucb.pop()
 
     def mostPromisingMoves(self):
         current_node = self.root
