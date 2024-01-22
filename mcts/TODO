@@ -1,1 +1,2 @@
-add ucb index to leaf nodes.
+Do not try other options if there is a win/checkmate. This will speed things up.
+
