@@ -7,6 +7,7 @@ from node import Node
 from collections import deque
 from operator import itemgetter
 
+
 class MonteCarloTreeSearch:
     def __init__(self, root_node, c):
         self.root = root_node
@@ -22,30 +23,12 @@ class MonteCarloTreeSearch:
             max_children = []
             unvisited_children = []
 
-            # alternate
-            root_to_move = not root_to_move
-
             for child in current.children:
-                # if str(child.move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
-                if str(child.move) not in ['g4h5', 'e4f5']:
-                    pass
                 if child.visits == 0:
                     unvisited_children.append(child)
                 else:
                     a = child.wins/child.visits 
-                    a = 1 - a
-
-                    # alternate
-                    if not root_to_move:
-                        # a = 1 - a
-                        pass
-
-                    assert root_to_move == (not child.player)
-
-                    if child.player:
-                        # a = 1 - a
-                        pass
-
+                    a = 1 - a # for display purpose, we need to make this modification.
                     b = self.c * math.sqrt(2*math.log(current.visits) / child.visits)
                     child_ucb = a + b 
                     if child_ucb > max_ucb:
@@ -94,6 +77,7 @@ class MonteCarloTreeSearch:
             choice = random.choice(max_children)
             # print("Node: " + str(choice) + ", UCB: " + str(max_ucb))
             return choice
+ 
     
     def expansion(self, current_node):
         current_board = current_node.board
@@ -124,7 +108,8 @@ class MonteCarloTreeSearch:
             return random.choice(current_node.children) # just simulate one time
         else:
             return None
-    
+
+
     def simulation(self, current_node):
         current_board = chess.Board(current_node.board.fen())        
         while not current_board.is_game_over():
@@ -132,6 +117,7 @@ class MonteCarloTreeSearch:
             current_board.push(move)
         return current_board.result()
 
+ 
     def backpropagation(self, current_node, outcome):
         while current_node:
             if (current_node.player and outcome == "1-0") or (not current_node.player and outcome == "0-1"):
@@ -141,11 +127,13 @@ class MonteCarloTreeSearch:
             current_node.update_visits()
             current_node = current_node.parent
 
+
     def printTree(self, limit):
         print("Tree: ")
         self.pindex_ucb = []
         return self.printTreeHelper(self.root, 0, 0, 0, limit)
-    
+
+
     def sort_children_by(self, node, ucb=True):
         """ 
         given a node, sort its children by ucb or win_rate
@@ -199,8 +187,8 @@ class MonteCarloTreeSearch:
         str += "|-- " + f"{win_rate:.4f} [[{index_win_rate}:{index_ucb}] [{len(self.pindex_ucb)} {'/'.join(self.pindex_ucb)}]] " + node.nodeRepresentation(self.c)
         print(str)
 
-        children_ucb = self.sort_children_by(node, True)
-        children_win_rate = self.sort_children_by(node, False)
+        children_ucb = self.sort_children_by(node, True) # get a list
+        children_win_rate = self.sort_children_by(node, False) # get a dict
 
         # for (index1, child_tmp) in reversed(children_win_rate):
         for (index1, child_tmp) in reversed(children_win_rate[:3]):
@@ -208,6 +196,7 @@ class MonteCarloTreeSearch:
             self.pindex_ucb.append(f"{index2}")
             self.printTreeHelper(child_tmp, level + 1, index1, index2, limit)
             self.pindex_ucb.pop()
+
 
     def mostPromisingMoves(self):
         current_node = self.root

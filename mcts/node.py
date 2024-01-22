@@ -9,7 +9,6 @@ class Node:
         self.wins = wins
         self.visits = visits
         self.move = move
-        # self.end = board.is_game_over()
 
     def __str__(self):
         return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}, Player: {'White' if self.player else 'Black'}"
@@ -38,11 +37,9 @@ class Node:
     
     def is_end(self):
         return self.board.is_game_over()
-        # return self.end
     
     def nodeRepresentation(self, c):
-        # nodes = self.path()
-        n = self
+        n = self # BAD. I will change it later. TODO: change n.* to self.*
         moves = '/'.join([n.move for n in n.path()])
         lmoves = len(n.path())
         if n.parent is None:
