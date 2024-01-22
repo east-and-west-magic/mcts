@@ -148,7 +148,8 @@ class MonteCarloTreeSearch:
                     # sort by win_rate
                     res.append((1 - a, child))
             else:
-                res.append((0, child))
+                # inf
+                res.append((-1, child))
 
         first_item = itemgetter(0)
         res2 = sorted(res, key = first_item, reverse=True)                

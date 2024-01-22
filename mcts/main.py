@@ -11,8 +11,8 @@ def main():
     random.seed(123)
 
     n_simu = 1
-    n_mcts = 3100 # 1_000_000
-    n_show = 1
+    n_mcts = 1_000_000
+    n_show = 100
 
     # Tree 6 - Strange Test Case, From Week-5/time6
     if True:
@@ -51,21 +51,21 @@ def main():
         monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
         for i in tqdm(range(n_mcts)):
-            if (i == 79) or (i == 30):
+            if (i == 57) or (i == 100):
                 pass
 
             print("Test " + str(i + 1) + ":")
             current = monte_carlo.selection()
 
-            moves = []
-            tmp = current
-            while tmp.move is not None:
-                moves.append(str(tmp.move))
-                tmp = tmp.parent
+            # moves = []
+            # tmp = current
+            # while tmp.move is not None:
+            #     moves.append(str(tmp.move))
+            #     tmp = tmp.parent
 
 
-            if moves == ['g4h5', 'e4f5']:
-                pass
+            # if moves == ['g4h5', 'e4f5']:
+            #     pass
 
             node_log = None
             if current.is_end():
@@ -114,7 +114,7 @@ def main():
                 # monte_carlo.printTree(1)
                 for x in range(7):
                     monte_carlo.printTree(x+1)
-                    print(f"[steve] show {x+1} @ {i}")
+                    print(f"[steve] show {x} @ {i}")
             else:
                 # monte_carlo.printTree()
                 pass
