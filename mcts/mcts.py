@@ -112,6 +112,18 @@ class MonteCarloTreeSearch:
     
     def simulation(self, current_node):
         current_board = chess.Board(current_node.board.fen())
+
+        is_checkmate = False
+        for move in current_board.legal_moves:
+            current_board.push(move)
+            if current_board.is_checkmate():
+                is_checkmate = True
+                break
+            else:
+                current_board.pop()
+        if is_checkmate:
+            return current_board.result()
+        
         while not current_board.is_game_over():
             move = random.choice(list(current_board.legal_moves))
             current_board.push(move)
