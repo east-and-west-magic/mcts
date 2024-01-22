@@ -43,12 +43,14 @@ class Node:
     def nodeRepresentation(self, c):
         # nodes = self.path()
         n = self
+        moves = '/'.join([n.move for n in n.path()])
         if n.parent is None:
             return \
                 f"win: {n.visits-n.wins}, " \
                 f"visits: {n.visits}, " \
                 f"[], " \
-                f"{self.board.fen()}"
+                f"[{moves}]"
+                # f"{self.board.fen()}"
         
         if n.visits > 0:
                 import math
@@ -57,12 +59,14 @@ class Node:
                 return \
                 f"ucb: {a + b:.4f} (({n.visits-n.wins}/{n.visits}) {a:.4f}+{b:.4f}), " \
                 f"[{n.move}], " \
-                f"{self.board.fen()}"
+                f"[{moves}]"
+                # f"{n.board.fen()}"
         else:
             return \
                 f"ucb: {float('inf')}, " \
                 f"[{n.move}], " \
-                f"{self.board.fen()}"
+                f"[{moves}]"
+                # f"{n.board.fen()}"
 
         if self.visits == 0:
             return f"({self.visits-self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "

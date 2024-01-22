@@ -15,11 +15,16 @@ class MonteCarloTreeSearch:
 
     def selection(self):
         current = self.root
+        root_to_move = False
         while not current.is_leaf():
             max_ucb = float("-inf")
             selected_child = None
             max_children = []
             unvisited_children = []
+
+            # alternate
+            root_to_move = not root_to_move
+
             for child in current.children:
                 # if str(child.move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
                 if str(child.move) not in ['g4h5', 'e4f5']:
@@ -28,9 +33,19 @@ class MonteCarloTreeSearch:
                     unvisited_children.append(child)
                 else:
                     a = child.wins/child.visits 
+                    a = 1 - a
+
+                    # alternate
+                    if not root_to_move:
+                        # a = 1 - a
+                        pass
+
+                    assert root_to_move == (not child.player)
+
                     if child.player:
-                        a = 1 - a
-                        # pass
+                        # a = 1 - a
+                        pass
+
                     b = self.c * math.sqrt(2*math.log(current.visits) / child.visits)
                     child_ucb = a + b 
                     if child_ucb > max_ucb:
@@ -151,7 +166,7 @@ class MonteCarloTreeSearch:
 
 
     def printTreeHelper(self, node, level, index_ucb, index_win_rate):
-        if level >= 3:
+        if level >= 4:
             return
         if node.visits == 0:
             pass
