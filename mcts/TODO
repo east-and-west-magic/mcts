@@ -1,3 +1,5 @@
 Do not try other options if there is a win/checkmate. This will speed things up.
-44k/1m, 20min / 7hours
 
+Good result: !!
+44k/1m, 20min / 7hours, no converge.
+Aha, after this change, it converge in less than 2min.

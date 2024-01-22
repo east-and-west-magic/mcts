@@ -99,9 +99,11 @@ class MonteCarloTreeSearch:
         current_board = current_node.board
 
         # look ahead one step
-        for move in current_board.legal_moves:
-            current_board.push(move)
-            if current_board.is_checkmate():
+        for legal_move in list(current_node.board.legal_moves):
+            current_board.push(legal_move)
+            is_checkmate = current_board.is_checkmate()
+            current_board.pop()
+            if is_checkmate:
                 # skip expand
                 child_board = chess.Board(current_board.fen())
                 child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
@@ -109,8 +111,6 @@ class MonteCarloTreeSearch:
                 current_node.add_child(child_node)
                 # just return the child_node leads to checkmate
                 return child_node
-            else:
-                current_board.pop()
 
         for legal_move in list(current_node.board.legal_moves):
             # if str(legal_move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
