@@ -1,5 +1,8 @@
 TODO:
 ======
+
+This may or may not work, unlike the look-ahead.
+
 Depends on the length of the simulation, run follow-up simulations.
 This generalize the look-ahead idea below.
 
