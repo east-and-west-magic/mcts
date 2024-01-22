@@ -193,7 +193,10 @@ class MonteCarloTreeSearch:
         str = ""
         for i in range(level):
             str += "|   "
-        str += "|-- " + f"[[{index_win_rate}:{index_ucb}] [{len(self.pindex_ucb)} {'/'.join(self.pindex_ucb)}]] " + node.nodeRepresentation(self.c)
+        win_rate = 0
+        if node.visits:
+            win_rate = 1-node.wins/node.visits
+        str += "|-- " + f"{win_rate:.4f} [[{index_win_rate}:{index_ucb}] [{len(self.pindex_ucb)} {'/'.join(self.pindex_ucb)}]] " + node.nodeRepresentation(self.c)
         print(str)
 
         children_ucb = self.sort_children_by(node, True)
