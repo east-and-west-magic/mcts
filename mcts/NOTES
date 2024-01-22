@@ -1,3 +1,11 @@
+TODO:
+======
+Depends on the length of the simulation, run follow-up simulations.
+This generalize the look-ahead idea below.
+
+
+DONE:
+======
 Do not try other options if there is a win/checkmate. This will speed things up.
 
 Good result: !!
