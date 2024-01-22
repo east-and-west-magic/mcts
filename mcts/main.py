@@ -23,13 +23,13 @@ def main():
         # fen = "8/k7/3K4/8/1Q6/8/8/8 w - - 0 1"
     
         ##################################################################
-        # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending DTD: 1, Kxb2 draw
-        # fen = "8/8/8/1R6/2K5/8/k7/8 w - - 0 1" # rook ending DTM: 4, Kc3 win within 10 min
+        # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending DTD: 1, Kxb2 draw (GOOD)
+        # fen = "8/8/8/1R6/2K5/8/k7/8 w - - 0 1" # rook ending DTM: 4, Kc3 win within 1 min (GOOD)
 
         # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending. DTD: 1
         # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # same as above, black to move
 
-        # fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose
+        fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose (GOOD)
         ##################################################################
 
         # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
@@ -50,7 +50,8 @@ def main():
         # fen = "4k2r/8/8/8/8/8/8/3QK3 w - - 0 1"
 
         # fen = "1r4k1/p1p2R2/4B1p1/8/8/1Pb5/q1P2PP1/3K3R w - - 3 28"
-        fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"
+        # fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27"
+
         root_node = Node(chess.Board(fen), None, chess.WHITE, 0, 0, None)
         monte_carlo = MonteCarloTreeSearch(root_node, 1)
 

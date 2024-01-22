@@ -202,6 +202,7 @@ class MonteCarloTreeSearch:
         children_ucb = self.sort_children_by(node, True)
         children_win_rate = self.sort_children_by(node, False)
 
+        # for (index1, child_tmp) in reversed(children_win_rate):
         for (index1, child_tmp) in reversed(children_win_rate[:3]):
             index2 = children_ucb[child_tmp.move]
             self.pindex_ucb.append(f"{index2}")
