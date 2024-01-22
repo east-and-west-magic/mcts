@@ -44,12 +44,13 @@ class Node:
         # nodes = self.path()
         n = self
         moves = '/'.join([n.move for n in n.path()])
+        lmoves = len(n.path())
         if n.parent is None:
             return \
                 f"win: {n.visits-n.wins}, " \
                 f"visits: {n.visits}, " \
                 f"[], " \
-                f"[{moves}]"
+                f"[{lmoves} {moves}]"
                 # f"{self.board.fen()}"
         
         if n.visits > 0:
@@ -59,13 +60,13 @@ class Node:
                 return \
                 f"ucb: {a + b:.4f} (({n.visits-n.wins}/{n.visits}) {a:.4f}+{b:.4f}), " \
                 f"[{n.move}], " \
-                f"[{moves}]"
+                f"[{lmoves} {moves}]"
                 # f"{n.board.fen()}"
         else:
             return \
                 f"ucb: {float('inf')}, " \
                 f"[{n.move}], " \
-                f"[{moves}]"
+                f"[{lmoves} {moves}]"
                 # f"{n.board.fen()}"
 
         if self.visits == 0:

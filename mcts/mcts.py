@@ -126,9 +126,9 @@ class MonteCarloTreeSearch:
             current_node.update_visits()
             current_node = current_node.parent
 
-    def printTree(self):
+    def printTree(self, limit):
         print("Tree: ")
-        return self.printTreeHelper(self.root, 0, 0, 0)
+        return self.printTreeHelper(self.root, 0, 0, 0, limit)
     
     def sort_children_by(self, node, ucb=True):
         """ 
@@ -165,8 +165,8 @@ class MonteCarloTreeSearch:
         return res3
 
 
-    def printTreeHelper(self, node, level, index_ucb, index_win_rate):
-        if level >= 4:
+    def printTreeHelper(self, node, level, index_ucb, index_win_rate, limit):
+        if level >= limit:
             return
         if node.visits == 0:
             pass
@@ -181,7 +181,7 @@ class MonteCarloTreeSearch:
         children_win_rate = self.sort_children_by(node, False)
 
         for (index_tmp, child_tmp) in reversed(children_win_rate):
-            self.printTreeHelper(child_tmp, level + 1, index_tmp, children_ucb[child_tmp.move])
+            self.printTreeHelper(child_tmp, level + 1, index_tmp, children_ucb[child_tmp.move], limit)
 
     def mostPromisingMoves(self):
         current_node = self.root
