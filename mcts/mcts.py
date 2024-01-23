@@ -123,10 +123,10 @@ class MonteCarloTreeSearch:
             current_node = current_node.parent
 
 
-    def printTree(self, limit):
+    def printTree(self, limit, topk):
         print("Tree: ")
         self.pindex_ucb = []
-        return self.printTreeHelper(self.root, 0, 0, 0, limit)
+        return self.printTreeHelper(self.root, 0, 0, 0, limit, topk)
 
 
     def sort_children_by(self, node, ucb=True):
@@ -165,7 +165,7 @@ class MonteCarloTreeSearch:
         return res3
 
 
-    def printTreeHelper(self, node, level, index_win_rate, index_ucb, limit):
+    def printTreeHelper(self, node, level, index_win_rate, index_ucb, limit, topk):
         if level >= limit:
             return
 
@@ -184,11 +184,12 @@ class MonteCarloTreeSearch:
         children_ucb = self.sort_children_by(node, True) # get a list
         children_win_rate = self.sort_children_by(node, False) # get a dict
 
-        # for (index1, child_tmp) in reversed(children_win_rate[:3]):
+        if level > 1 and topk and topk > 0:
+            children_win_rate = children_win_rate[:topk]
         for (index1, child_tmp) in reversed(children_win_rate):
             index2 = children_ucb[child_tmp.move]
             self.pindex_ucb.append(f"{index2}")
-            self.printTreeHelper(child_tmp, level + 1, index1, index2, limit)
+            self.printTreeHelper(child_tmp, level + 1, index1, index2, limit, topk)
             self.pindex_ucb.pop()
 
 
