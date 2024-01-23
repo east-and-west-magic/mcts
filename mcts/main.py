@@ -77,7 +77,7 @@ def main():
             monte_carlo.backpropagation(child, outcome)
 
         ###################### 
-        nodes = node_log.path()
+        nodes = node_log.get_nodes()
         for level, n in enumerate(nodes):
             if n.visits > 0:
                     import math

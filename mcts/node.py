@@ -1,82 +1,123 @@
+from __future__ import annotations
+from typing import List
+import math
+import chess
+
+
 class Node:
-    def __init__(self, board, parent, player, wins, visits, move):
+    def __init__(self, 
+                 board: chess.Board, 
+                 parent: Node, 
+                 player: bool, 
+                 wins: float, 
+                 visits: int, 
+                 move: str):
         self.board = board
-        self.player = player
         self.parent = parent
-        self.children = []
+        self.player = player
         self.wins = wins
         self.visits = visits
         self.move = move
 
-
-    def __str__(self):
-        return f"Board: {self.board.fen()}, Visits: {self.visits}, Wins: {self.wins}, Player: {'White' if self.player else 'Black'}"
+        self.children = []
 
 
-    def update_wins(self, value):
+    def __str__(self) -> str:
+        return \
+            f"Board: {self.board.fen()}," \
+            f"Visits: {self.visits}," \
+            f"Wins: {self.wins}," \
+            f"Player: {'White' if self.player else 'Black'}"
+
+
+    def update_wins(self, value: float) -> None:
         self.wins += value
 
 
-    def update_visits(self):
-        self.visits += 1
+    def update_visits(self, value: int = 1) -> None:
+        self.visits += value
 
 
-    def add_child(self, child):
+    def add_child(self, child: Node) -> None:
         self.children.append(child)
 
 
-    def is_leaf(self):
+    def is_leaf(self) -> bool:
         return not self.children
     
     
-    def path(self):
+    def is_end(self) -> bool:
+        return self.board.is_game_over()
+
+
+    def get_nodes(self) -> List[Node]:
         """
         get all the parent nodes based on the current node.
         The output will be root->...->current_node.
         """
         nodes = []
-        tmp = self
-        while tmp.parent:
-            nodes.append(tmp)
-            tmp = tmp.parent
+        current = self
+        while current.parent:
+            nodes.append(current)
+            current = current.parent
         nodes.reverse()
         return nodes
     
 
-    def is_end(self):
-        return self.board.is_game_over()
+    def get_moves(self) -> List[str]:
+        return [n.move for n in self.get_nodes()]
     
 
-    def nodeRepresentation(self, c):
-        n = self # BAD. I will change it later. TODO: change n.* to self.*
-        moves = '/'.join([n.move for n in n.path()])
-        lmoves = len(n.path())
-        if n.parent is None:
+    def get_win_rate(self) -> float:
+        return self.wins / self.visits
+
+
+    def get_lose_rate(self) -> float:
+        return 1 - self.get_win_rate()
+
+
+    def get_exploration(self) -> float:
+        return math.sqrt(2*math.log(self.parent.visits) / self.visits)
+
+
+    def get_ucb(self, c: float) -> float:
+        return self.get_win_rate + c * self.get_exploration()
+
+
+    def get_ucb2(self, c: float) -> float:
+        return self.get_lose_rate() + c * self.get_exploration()
+
+
+    def node_repr(self, c) -> str:
+        moves = '/'.join(self.get_moves())
+        lmoves = len(moves)
+        if self.parent is None:
             return \
-                f"win: {n.visits-n.wins}, " \
-                f"visits: {n.visits}, " \
+                f"win: {self.visits-self.wins}, " \
+                f"visits: {self.visits}, " \
                 f"[], " \
                 f"[{lmoves} {moves}]"
                 # f"{self.board.fen()}"
         
-        if n.visits > 0:
-                import math
-                a = 1 - n.wins / n.visits
-                b = c * math.sqrt(2*math.log(n.parent.visits) / n.visits)
+        if self.visits > 0:
+                a = self.get_lose_rate()
+                b = self.get_exploration()
                 return \
-                f"ucb: {a + b:.4f} (({n.visits-n.wins}/{n.visits}) {a:.4f}+{b:.4f}), " \
-                f"[{n.move}], " \
-                f"[{lmoves} {moves}]"
-                # f"{n.board.fen()}"
-        else:
-            return \
-                f"ucb: {float('inf')}, " \
-                f"[{n.move}], " \
+                f"ucb: {self.get_ucb2(c):.4f} (({self.visits-self.wins}/{self.visits}) {a:.4f}+{b:.4f}), " \
+                f"[{self.move}], " \
                 f"[{lmoves} {moves}]"
                 # f"{n.board.fen()}"
 
-        # if self.visits == 0:
-        #     return f"({self.visits-self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
-        # else:
-        #     return f"({1-self.wins/self.visits:.4f}, {self.wins/self.visits:.4f}, {self.visits-self.wins}/{self.visits}, {[str(m) for m in reversed(moves)]}, {self.board.fen()}) "
+        return \
+            f"ucb: {float('inf')}, " \
+            f"[{self.move}], " \
+            f"[{lmoves} {moves}]"
+            # f"{n.board.fen()}"
+
+
+    # def nodeRepresentation(self) -> str:
+    #     if self.visits == 0:
+    #         return f"({self.board.fen()}) "
+    #     else:
+    #         return f"({self.wins}/{self.visits}, {self.board.fen()}) "
     
