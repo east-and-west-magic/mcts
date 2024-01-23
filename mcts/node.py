@@ -81,7 +81,7 @@ class Node:
 
 
     def get_ucb(self, c: float) -> float:
-        return self.get_win_rate + c * self.get_exploration()
+        return self.get_win_rate() + c * self.get_exploration()
 
 
     def get_ucb2(self, c: float) -> float:

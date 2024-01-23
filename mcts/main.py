@@ -1,18 +1,17 @@
+import random
+import math
 import chess
-import chess.svg
-import chess.engine
 from node import Node
 from mcts import MonteCarloTreeSearch
 from tqdm import tqdm
-import random
 
 
 def main():
     random.seed(123)
 
     n_simu = 1 # how many simulations to run each time. Typically 1.
-    n_mcts = 1_000_000 # how many iterations to run
-    n_show = 100 # print in every n_show steps
+    n_mcts = 100 # 1_000_000 # how many iterations to run
+    n_show = 1 # 10000 # print in every n_show steps
 
     # fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
     # fen = "2k5/8/2K5/Q7/8/8/8/8 w - - 0 1"
@@ -80,14 +79,15 @@ def main():
         nodes = node_log.get_nodes()
         for level, n in enumerate(nodes):
             if n.visits > 0:
-                    import math
-                    a = 1 - n.wins / n.visits
-                    b = monte_carlo.c * math.sqrt(2 * math.log(n.parent.visits) / n.visits)
+                    # for display purpose, we use lose rate
+                    a = n.get_lose_rate()
+                    b = n.get_exploration()
+                    c = a + monte_carlo.c * b
                     print(
                     f"[steve] level: {level+1},",
                     f"move: {n.move},",
-                    f"ucb: {a + b:.4f} ({a:.4f}+{b:.4f}),",
-                    f"winrate: {1-n.wins/n.visits},",
+                    f"ucb: {c:.4f} ({a:.4f}+{b:.4f}),",
+                    f"winrate: {n.get_lose_rate()},", # for display purpose, we use lose rate
                     f"win: {n.visits-n.wins},",
                     f"visits: {n.visits},", 
                     f"pvisits: {n.parent.visits},", 
@@ -105,9 +105,10 @@ def main():
 
         # output trees with different level of detail
         if (i + 1) % n_show == 0:
-            for x in range(7):
-                monte_carlo.printTree(x+1)
-                print(f"[steve] show {x} @ {i}")
+            n_start = 1 # 6
+            for show_level in range(n_start, 0, -1):
+                monte_carlo.printTree(show_level + 1)
+                print(f"[steve] show {show_level} @ {i}")
 
 
 if __name__ == "__main__":

@@ -24,10 +24,8 @@ class MonteCarloTreeSearch:
                 if child.visits == 0:
                     unvisited_children.append(child)
                 else:
-                    a = child.wins/child.visits 
-                    a = 1 - a # for display purpose, we need to make this modification.
-                    b = self.c * math.sqrt(2*math.log(current.visits) / child.visits)
-                    child_ucb = a + b 
+                    # Use lose rate. Is this a bug? BUG
+                    child_ucb = child.get_ucb2(self.c)
                     if child_ucb > max_ucb:
                         max_children = []
                         max_children.append(child)
@@ -186,8 +184,8 @@ class MonteCarloTreeSearch:
         children_ucb = self.sort_children_by(node, True) # get a list
         children_win_rate = self.sort_children_by(node, False) # get a dict
 
-        # for (index1, child_tmp) in reversed(children_win_rate):
-        for (index1, child_tmp) in reversed(children_win_rate[:3]):
+        # for (index1, child_tmp) in reversed(children_win_rate[:3]):
+        for (index1, child_tmp) in reversed(children_win_rate):
             index2 = children_ucb[child_tmp.move]
             self.pindex_ucb.append(f"{index2}")
             self.printTreeHelper(child_tmp, level + 1, index1, index2, limit)
