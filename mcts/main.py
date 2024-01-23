@@ -112,7 +112,7 @@ def main():
 
         # output trees with different level of detail
         if (i + 1) % n_show == 0:
-            n_start = 6
+            n_start = 7
             for show_level in range(n_start, 0, -1):
                 monte_carlo.printTree(show_level + 1, topk)
                 print(f"[steve] show {show_level} @ {i}")
