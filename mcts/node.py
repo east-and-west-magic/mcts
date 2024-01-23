@@ -76,42 +76,41 @@ class Node:
         return 1 - self.get_win_rate()
 
 
-    def get_exploration(self) -> float:
+    def get_curious_rate(self) -> float:
         return math.sqrt(2*math.log(self.parent.visits) / self.visits)
 
 
     def get_ucb(self, c: float) -> float:
-        return self.get_win_rate() + c * self.get_exploration()
+        return self.get_win_rate() + c * self.get_curious_rate()
 
 
     def get_ucb2(self, c: float) -> float:
-        return self.get_lose_rate() + c * self.get_exploration()
+        return self.get_lose_rate() + c * self.get_curious_rate()
 
 
     def node_repr(self, c) -> str:
-        moves = '/'.join(self.get_moves())
-        lmoves = len(moves)
+        moves = self.get_moves()
         if self.parent is None:
             return \
                 f"win: {self.visits-self.wins}, " \
                 f"visits: {self.visits}, " \
                 f"[], " \
-                f"[{lmoves} {moves}]"
+                f"[{len(moves)} {'/'.join(moves)}]"
                 # f"{self.board.fen()}"
         
         if self.visits > 0:
                 a = self.get_lose_rate()
-                b = self.get_exploration()
+                b = self.get_curious_rate()
                 return \
                 f"ucb: {self.get_ucb2(c):.4f} (({self.visits-self.wins}/{self.visits}) {a:.4f}+{b:.4f}), " \
                 f"[{self.move}], " \
-                f"[{lmoves} {moves}]"
+                f"[{len(moves)} {'/'.join(moves)}]"
                 # f"{n.board.fen()}"
 
         return \
             f"ucb: {float('inf')}, " \
             f"[{self.move}], " \
-            f"[{lmoves} {moves}]"
+            f"[{len(moves)} {'/'.join(moves)}]"
             # f"{n.board.fen()}"
 
 

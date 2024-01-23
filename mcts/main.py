@@ -5,13 +5,18 @@ from node import Node
 from mcts import MonteCarloTreeSearch
 from tqdm import tqdm
 
+debug = True
 
 def main():
     random.seed(123)
 
     n_simu = 1 # how many simulations to run each time. Typically 1.
-    n_mcts = 100 # 1_000_000 # how many iterations to run
-    n_show = 1 # 10000 # print in every n_show steps
+    n_mcts = 1_000_000 # how many iterations to run
+    if debug:
+        n_mcts = 100
+    n_show = 100 # 10000 # print in every n_show steps
+    if debug:
+        n_show = 1
 
     # fen = "4k3/8/4K3/Q7/8/8/8/8 w - - 0 1"
     # fen = "2k5/8/2K5/Q7/8/8/8/8 w - - 0 1"
@@ -81,7 +86,7 @@ def main():
             if n.visits > 0:
                     # for display purpose, we use lose rate
                     a = n.get_lose_rate()
-                    b = n.get_exploration()
+                    b = n.get_curious_rate()
                     c = a + monte_carlo.c * b
                     print(
                     f"[steve] level: {level+1},",
@@ -105,7 +110,7 @@ def main():
 
         # output trees with different level of detail
         if (i + 1) % n_show == 0:
-            n_start = 1 # 6
+            n_start = 6
             for show_level in range(n_start, 0, -1):
                 monte_carlo.printTree(show_level + 1)
                 print(f"[steve] show {show_level} @ {i}")
