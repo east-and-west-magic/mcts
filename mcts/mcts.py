@@ -1,6 +1,4 @@
 import chess
-import chess.svg
-import chess.engine
 import random
 import math
 from node import Node
@@ -16,7 +14,6 @@ class MonteCarloTreeSearch:
 
     def selection(self):
         current = self.root
-        root_to_move = False
         while not current.is_leaf():
             max_ucb = float("-inf")
             selected_child = None
@@ -171,10 +168,9 @@ class MonteCarloTreeSearch:
 
 
     def printTreeHelper(self, node, level, index_win_rate, index_ucb, limit):
-        # global pindex_ucb
-
         if level >= limit:
             return
+
         if node.visits == 0:
             pass
 
@@ -198,30 +194,30 @@ class MonteCarloTreeSearch:
             self.pindex_ucb.pop()
 
 
-    def mostPromisingMoves(self):
-        current_node = self.root
-        i = 1
-        while not current_node.is_leaf():
-            max_children = []
-            max_ucb = float("-inf")
-            for child in current_node.children:
-                if child.visits != 0:
-                    exploitation = child.wins / child.visits
-                    exploration = self.c * math.sqrt(2*math.log(current_node.visits) / child.visits)
-                    # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
-                    info = (
-                        exploitation, 
-                        (child.wins, child.visits), 
-                        exploration,
-                        (current_node.visits, child.visits)
-                    )
-                    if exploration + exploitation > max_ucb:
-                        max_ucb = exploration + exploitation
-                        max_children = [(child, info)]
-                    elif exploration + exploitation == max_ucb:
-                        max_children.append((child, info))
-            choice, info = random.choice(max_children)
-            print("Step " + str(i) + ": " + str(choice.move) + ", UCB: " + str(max_ucb), info)
-            i += 1
-            current_node = choice
+    # def mostPromisingMoves(self):
+    #     current_node = self.root
+    #     i = 1
+    #     while not current_node.is_leaf():
+    #         max_children = []
+    #         max_ucb = float("-inf")
+    #         for child in current_node.children:
+    #             if child.visits != 0:
+    #                 exploitation = child.wins / child.visits
+    #                 exploration = self.c * math.sqrt(2*math.log(current_node.visits) / child.visits)
+    #                 # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
+    #                 info = (
+    #                     exploitation, 
+    #                     (child.wins, child.visits), 
+    #                     exploration,
+    #                     (current_node.visits, child.visits)
+    #                 )
+    #                 if exploration + exploitation > max_ucb:
+    #                     max_ucb = exploration + exploitation
+    #                     max_children = [(child, info)]
+    #                 elif exploration + exploitation == max_ucb:
+    #                     max_children.append((child, info))
+    #         choice, info = random.choice(max_children)
+    #         print("Step " + str(i) + ": " + str(choice.move) + ", UCB: " + str(max_ucb), info)
+    #         i += 1
+    #         current_node = choice
         
