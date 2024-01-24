@@ -11,12 +11,12 @@ def main():
     random.seed(123)
 
     n_simu = 1 # how many simulations to run each time. Typically 1.
-    n_mcts = 100_000 # how many iterations to run
+    n_mcts = 1_000_000 # how many iterations to run
     n_show = 100 # 10000 # print in every n_show steps
     topk = 3 # show only topk children when print trees
 
     ################
-    # n_mcts = 1_000
+    n_mcts = 70_000
     n_show = 1000
     ################
 
@@ -120,7 +120,12 @@ def main():
         # output trees with different level of detail
         if (i + 1) % n_show == 0:
             n_start = 7
-            for show_level in range(n_start, 0, -1):
+            n_end = 0
+
+            # testing
+            # n_start = 1
+
+            for show_level in range(n_start, n_end, -1):
                 monte_carlo.printTree(show_level + 1, topk)
                 print(f"[steve] show {show_level} @ {i}")
 
