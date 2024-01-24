@@ -17,17 +17,18 @@ class Node:
         self.player = player
         self.wins = wins
         self.visits = visits
-        self.move = move
+        self.move = move # a move like e4, Nf6
 
         self.children = []
 
 
     def __str__(self) -> str:
         return \
-            f"Board: {self.board.fen()}," \
             f"Visits: {self.visits}," \
             f"Wins: {self.wins}," \
             f"Player: {'White' if self.player else 'Black'}"
+
+            # f"Board: {self.board.fen()}," \
 
 
     def update_wins(self, value: float) -> None:
