@@ -64,8 +64,15 @@ class MonteCarloTreeSearch:
             if is_checkmate:
                 # skip expand
                 child_board = chess.Board(current_board.fen())
-                child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
-                child_board.push(legal_move)
+                move = child_board.san_and_push(legal_move)
+                child_node = Node(
+                    child_board, 
+                    current_node, 
+                    chess.BLACK if current_node.player else chess.WHITE, 
+                    0, 
+                    0, 
+                    move,
+                )
                 current_node.add_child(child_node)
                 # cache
                 if cache:
@@ -127,8 +134,15 @@ class MonteCarloTreeSearch:
         current_board = current_node.board
         for legal_move in list(current_node.board.legal_moves):
             child_board = chess.Board(current_board.fen())
-            child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
-            child_board.push(legal_move)
+            move = child_board.san_and_push(legal_move)
+            child_node = Node(
+                child_board, 
+                current_node, 
+                chess.BLACK if current_node.player else chess.WHITE, 
+                0, 
+                0, 
+                move,
+            )
             current_node.add_child(child_node)
         if current_node.children: # how to deal with
             return random.choice(current_node.children) # just simulate one time
