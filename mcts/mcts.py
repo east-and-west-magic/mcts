@@ -2,7 +2,6 @@ import chess
 import random
 import math
 from node import Node
-from collections import deque
 from operator import itemgetter
 
 
@@ -10,6 +9,9 @@ class MonteCarloTreeSearch:
     def __init__(self, root_node, c):
         self.root = root_node
         self.c = c
+        self.mate_in_1 = {}
+        self.be_mated_in_1 = {}
+        self.mate_in_2 = {}
     
 
     def selection(self):
@@ -39,45 +41,21 @@ class MonteCarloTreeSearch:
             current = selected_child
             # print(current)
         return current
-        
-
-    def selection2(self):
-        max_ucb = float("-inf")
-        max_children = []
-        unvisited_children = []
-        q = deque()
-        q.append(self.root)
-        while q:
-            currentNode = q.popleft()
-            if not currentNode.is_leaf():
-                for child in currentNode.children:
-                    q.append(child)
-            elif currentNode.visits == 0:
-                unvisited_children.append(currentNode)
-            else:
-                exploitation = currentNode.wins / currentNode.visits
-                exploration = self.c * math.sqrt(math.log(currentNode.parent.visits) / currentNode.visits)
-                # print("Exploitation: " + str(exploitation) + ", Exploration: " + str(exploration) + ", UCB: " + str(exploitation + exploration))
-                if exploration + exploitation > max_ucb:
-                    max_ucb = exploration + exploitation
-                    max_children = [currentNode]
-                elif exploration + exploitation == max_ucb:
-                    max_children.append(currentNode)
-        if unvisited_children:
-            choice = random.choice(unvisited_children)
-            assert False
-            # print("Node: " + str(choice) + ", UCB: no visits")
-            return choice
-        else:
-            choice = random.choice(max_children)
-            # print("Node: " + str(choice) + ", UCB: " + str(max_ucb))
-            return choice
- 
+         
     
-    def expansion(self, current_node):
-        current_board = current_node.board
+    def one_step_lookahead(self, current_node: Node, cache: bool) -> Node:
+        """
+        lookahead one step and check if there is a checkmate/win.
+        If true, retun the node representing the move that checmates.
+        if not, return None
+        """
 
-        # look ahead one step
+        if cache:
+            res = self.mate_in_1.get(current_node.get_moves(), None)
+            if res:
+                return res
+
+        current_board = current_node.board
         for legal_move in list(current_node.board.legal_moves):
             current_board.push(legal_move)
             is_checkmate = current_board.is_checkmate()
@@ -88,13 +66,65 @@ class MonteCarloTreeSearch:
                 child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
                 child_board.push(legal_move)
                 current_node.add_child(child_node)
-                # just return the child_node leads to checkmate
+                # cache
+                if cache:
+                    self.mate_in_1[current_node.get_moves()] = child_node
+                # return the child_node leads to checkmate, eliminates wasted expansion
                 return child_node
+        return None
 
+
+    # def three_step_lookahead(self, current_node: Node):
+    #     """
+    #     lookahead 3 steps.
+    #     If there is a next step move, no matther what the opponent will do, 
+    #     there is a checkmate move, then return that next step move.
+    #     if no, return None
+    #     """
+    #     assert self.mate_in_1[current_node.get_moves] is None
+
+    #     moves = current_node.get_moves()
+    #     current_board = current_node.board
+    #     for legal_move in list(current_node.board.legal_moves):
+    #         moves = moves + (current_board.san(legal_move),)
+    #         current_board.push(legal_move)
+    #         checkmate_for_every_move = True
+    #         for opponent_legal_move in list(current_board.legal_moves):
+    #             moves = moves + (current_board.san(opponent_legal_move),)
+    #             current_board.push(opponent_legal_move)
+    #             if moves not in self.mate_in_1:
+    #                 checkmate_for_every_move = False
+    #                 # return None # no need to pop, I guess, so directly return
+    #                 break
+    #         current_board.pop()
+    #         if checkmate_for_every_move:
+    #             # skip expand
+    #             child_board = chess.Board(current_board.fen())
+    #             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
+    #             child_board.push(legal_move)
+    #             current_node.add_child(child_node)
+    #             # just return the child_node leads to checkmate
+    #             return child_node
+    #         else:
+    #             break
+
+    #     return None
+
+
+    def expansion(self, current_node):
+        
+        # 1-step lookahead
+        node = self.one_step_lookahead(current_node, True)
+        if node:
+            return node
+        
+        # # 3-step lookahead
+        # node = self.three_step_lookahead(current_node)
+        # if node:
+        #     return node
+
+        current_board = current_node.board
         for legal_move in list(current_node.board.legal_moves):
-            # if str(legal_move) not in ['f5f7', 'g7g8', 'f7f5', 'g8g7']:
-            if str(legal_move) not in ['g4h5', 'e4f5']:                
-                pass
             child_board = chess.Board(current_board.fen())
             child_node = Node(child_board, current_node, chess.BLACK if current_node.player else chess.WHITE, 0, 0, child_board.san(legal_move))
             child_board.push(legal_move)
@@ -190,7 +220,7 @@ class MonteCarloTreeSearch:
         children_ucb = self.sort_children_by(node, True) # get a list
         children_win_rate = self.sort_children_by(node, False) # get a dict
 
-        if level > 1 and topk and topk > 0:
+        if level > 0 and topk > 0:
             children_win_rate = children_win_rate[:topk]
         for (index1, child_tmp) in reversed(children_win_rate):
             index2 = children_ucb[child_tmp.move]

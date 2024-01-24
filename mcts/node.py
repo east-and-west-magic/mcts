@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+# from typing import List
 import math
 import chess
 
@@ -50,7 +50,7 @@ class Node:
         return self.board.is_game_over()
 
 
-    def get_nodes(self) -> List[Node]:
+    def get_nodes(self) -> list[Node]:
         """
         get all the parent nodes based on the current node.
         The output will be root->...->current_node.
@@ -64,8 +64,9 @@ class Node:
         return nodes
     
 
-    def get_moves(self) -> List[str]:
-        return [n.move for n in self.get_nodes()]
+    def get_moves(self) -> tuple[str]:
+        # return [n.move for n in self.get_nodes()]
+        return tuple([n.move for n in self.get_nodes()])
     
 
     def get_win_rate(self) -> float:
