@@ -188,13 +188,20 @@ class MonteCarloTreeSearch:
             win_rate = 0
             if node.visits:
                 win_rate = 1-node.wins/node.visits
-            # "\033[31mHello\033[0m"
+
             if level % 2 == 0:
                 color_code = 31
             else:
                 color_code = 32
-            color = f"\033[{color_code}m{win_rate:.4f}\033[0m"
-            str += f"|-- " + f"{color} [[{index_win_rate}:{index_ucb}] [{len(pindex_ucb)} {'/'.join(pindex_ucb)}]] " + node.node_repr(self.c)
+            win_rate_with_color = f"\033[{color_code}m{win_rate:.4f}\033[0m"
+            # if you cannot get color to work on your system, use this:
+            # win_rate_with_color = f"{win_rate:.4f}"
+
+            str += f"|--"
+            str += f" {win_rate_with_color}"
+            str += f" [{index_win_rate}:{index_ucb}]"
+            str += f" [{len(pindex_ucb)} {'/'.join(pindex_ucb)}]"
+            str += f" {node.node_repr(self.c)}"
             print(str)
 
             children_ucb = self.sort_children_by(node, True) # get a list
