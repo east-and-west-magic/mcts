@@ -39,7 +39,10 @@ def main():
     # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending. DTD: 1
     # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # same as above, black to move
 
-    fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose (GOOD)
+
+    fen = "8/8/8/4Q3/8/8/K7/2k5 w - - 0 1" # queen ending. Mate in 6.
+
+    # fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose (GOOD)
     ##################################################################
 
     # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
@@ -70,7 +73,7 @@ def main():
         if (i == 57) or (i == 100):
             pass
 
-        print("Test " + str(i + 1) + ":")
+        print(f"Test {i+1}:")
         current = monte_carlo.selection()
 
         node_log = None
@@ -127,7 +130,7 @@ def main():
 
             for show_level in range(n_start, n_end, -1):
                 monte_carlo.printTree(show_level + 1, topk)
-                print(f"[steve] show {show_level} @ {i}")
+                print(f"[steve] show {show_level} @ {i+1}")
 
 
 if __name__ == "__main__":

@@ -190,9 +190,13 @@ class MonteCarloTreeSearch:
                 win_rate = 1-node.wins/node.visits
 
             if level % 2 == 0:
-                color_code = 31
+                color_code = "31" # red opponent
             else:
-                color_code = 32
+                # color_code = "34" # blue, myself
+                color_code = "32" # green, myself
+            if node.visits == 0:
+                color_code = "39"
+
             win_rate_with_color = f"\033[{color_code}m{win_rate:.4f}\033[0m"
             # if you cannot get color to work on your system, use this:
             # win_rate_with_color = f"{win_rate:.4f}"
