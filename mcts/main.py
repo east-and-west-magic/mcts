@@ -15,10 +15,12 @@ def main():
     n_show = 100 # 10000 # print in every n_show steps
     topk = 3 # show only topk children when print trees
 
-    ################
+    #####################################
+    # feel free to change these numbers
+    #####################################
     n_mcts = 70_000
     n_show = 1000
-    ################
+    #####################################
 
     if debug:
         n_mcts = 100

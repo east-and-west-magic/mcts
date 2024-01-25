@@ -204,7 +204,7 @@ class MonteCarloTreeSearch:
             str += f"|--"
             str += f" {win_rate_with_color}"
             str += f" [{index_win_rate}:{index_ucb}]"
-            str += f" [{len(pindex_ucb)} {'/'.join(pindex_ucb)}]"
+            str += f" [({len(pindex_ucb)}) {'/'.join(pindex_ucb)}]"
             str += f" {node.node_repr(self.c)}"
             print(str)
 

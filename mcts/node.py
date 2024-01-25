@@ -97,7 +97,7 @@ class Node:
                 f"win: {self.visits-self.wins}, " \
                 f"visits: {self.visits}, " \
                 f"[], " \
-                f"[{len(moves)} {'/'.join(moves)}]"
+                f"[({len(moves)}) {'/'.join(moves)}]"
                 # f"{self.board.fen()}"
         
         if self.visits > 0:
@@ -106,13 +106,13 @@ class Node:
                 return \
                 f"ucb: {self.get_ucb2(c):.4f} (({self.visits-self.wins}/{self.visits}) {a:.4f}+{b:.4f}), " \
                 f"[{self.move}], " \
-                f"[{len(moves)} {'/'.join(moves)}]"
+                f"[({len(moves)}) {'/'.join(moves)}]"
                 # f"{n.board.fen()}"
 
         return \
             f"ucb: {float('inf')}, " \
             f"[{self.move}], " \
-            f"[{len(moves)} {'/'.join(moves)}]"
+            f"[({len(moves)}) {'/'.join(moves)}]"
             # f"{n.board.fen()}"
 
 

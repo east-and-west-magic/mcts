@@ -2,3 +2,4 @@
 .venv
 *.pyc
 mcts/.ipynb_checkpoints/
+*.ans
