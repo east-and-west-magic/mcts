@@ -4,6 +4,15 @@ import random
 import math
 from node import Node
 from operator import itemgetter
+import pathlib
+
+import cppyy
+# cppyy.include("mcts/chess.hpp")
+cppyy.include(pathlib.Path(__file__).parent / "chess.hpp")
+from cppyy.gbl import chess as cppchess
+
+
+debug = False
 
 
 class MonteCarloTreeSearch:
@@ -150,11 +159,71 @@ class MonteCarloTreeSearch:
             return None
 
 
-    def simulation(self, current_node: Node) -> str:
+    # all_results = set(
+    #     cppchess.GameResultReason.CHECKMATE,
+    #     cppchess.GameResultReason.STALEMATE,
+    #     cppchess.GameResultReason.INSUFFICIENT_MATERIAL,
+    #     cppchess.GameResultReason.FIFTY_MOVE_RULE,
+    #     cppchess.GameResultReason.THREEFOLD_REPETITION,
+    #     cppchess.GameResultReason.NONE,
+    # )
+
+    def simulation_cpp(self, current_node: Node) -> str:
+        fen = current_node.board.fen()
+        board = cppchess.Board(fen)
+        # moves = cppchess.Movelist()
+        while board.isGameOver().second == cppchess.GameResult.NONE:
+            # for _ in range(50):
+            moves = cppchess.Movelist()
+            cppchess.movegen.legalmoves(moves, board)
+            t = [str(cppchess.uci.moveToSan(board, move)) for move in moves]
+            sorted_moves = sorted(zip(t, moves))
+            # if len(moves) == 0:
+            #     break
+            move = random.choice(sorted_moves)
+            # print(chess.uci.moveToSan(board, move))
+            board.makeMove(move[1])
+        # result = board.isGameOver().first
+        # assert result in all_results
+        result_fen = board.getFen()
+        result_board = chess.Board(result_fen)
+        return result_board.result()
+
+
+    def simulation_python(self, current_node: Node) -> str:
         current_board = chess.Board(current_node.board.fen())        
         while not current_board.is_game_over():
-            move = random.choice(list(current_board.legal_moves))
-            current_board.push(move)
+            moves = list(current_board.legal_moves)
+            t = [str(current_board.san(move)) for move in moves]
+
+            ##############
+            if debug:
+                fen = current_board.fen()
+                # fen = current_node.board.fen()
+                cppboard = cppchess.Board(fen)
+                if cppboard.isGameOver().second != cppchess.GameResult.NONE:
+                    # raise Exception("different game over situation!!!")
+                    pass
+                cppmoves = cppchess.Movelist()
+                cppchess.movegen.legalmoves(cppmoves, cppboard)
+                cppt = [str(cppchess.uci.moveToSan(cppboard, move)) for move in cppmoves]
+                if sorted(cppt) != sorted(t):
+                    raise Exception('diffent legal moves!!!')
+            ##############
+
+            sorted_moves = sorted(zip(t, moves))
+            move = random.choice(sorted_moves)
+            current_board.push(move[1])
+
+        ############################
+        if debug:
+            fen = current_board.fen()
+            # fen = current_node.board.fen()
+            cppboard = cppchess.Board(fen)
+            if cppboard.isGameOver().second == cppchess.GameResult.NONE:
+                # raise Exception("different game over situation!!!")
+                pass
+        ############################
         return current_board.result()
 
  
