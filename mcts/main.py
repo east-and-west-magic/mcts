@@ -5,7 +5,9 @@ from node import Node
 from mcts import MonteCarloTreeSearch
 from tqdm import tqdm
 
+
 debug = False
+
 
 def main():
     random.seed(123)
@@ -20,7 +22,7 @@ def main():
     #####################################
     n_mcts = 100_000
     n_show = 250
-    topk = 0
+    # topk = 0
     #####################################
 
     if debug:
@@ -138,6 +140,7 @@ def main():
             for show_level in range(n_start, n_end, -1):
                 monte_carlo.printTree(show_level + 1, topk)
                 print(f"[steve] show {show_level} @ {i+1}")
+                print("", flush=True)
 
 
 if __name__ == "__main__":
