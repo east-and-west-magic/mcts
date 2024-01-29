@@ -1,6 +1,6 @@
 import random
-import math
 import chess
+import time
 from node import Node
 from mcts import MonteCarloTreeSearch
 from tqdm import tqdm
@@ -18,8 +18,9 @@ def main():
     #####################################
     # feel free to change these numbers
     #####################################
-    n_mcts = 10_000
+    n_mcts = 100_000
     n_show = 250
+    topk = 0
     #####################################
 
     if debug:
@@ -41,18 +42,17 @@ def main():
     # fen = "8/8/8/8/2k5/K7/1r6/8 w - - 0 1" # rook ending. DTD: 1
     # fen = "8/8/8/8/2K5/k7/1R6/8 b - - 0 1" # same as above, black to move
 
-
-    # fen = "8/8/8/4Q3/8/8/K7/2k5 w - - 0 1" # queen ending. Mate in 6. (GOOD)
-
     fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose (GOOD)
     ##################################################################
 
     # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
-
+    # fen = "8/8/8/4Q3/8/8/K7/2k5 w - - 0 1" # queen ending. Mate in 6. (GOOD)
     # fen = "8/1Q1K4/8/8/k7/8/8/8 w - - 0 1" # queen ending DTM: 6
     # fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1" # queen ending DTM: 10
 
-    # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3" # easy pawn ending
+    # fen = "8/8/8/8/8/8/2Kpk3/8 w - - 0 1" # easiest pawn ending (GOOD)
+    # fen = "8/2kP4/4K3/8/8/8/8/8 w - - 0 1" # easier pawn ending (GOOD)
+    # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3" # easy pawn ending (GOOD)
     # fen = "3k4/8/3K4/3P4/8/8/8/8 w - - 0 1"
     # fen = "8/6p1/5p2/5P2/4k1KP/8/8/8 w - - 0 1"
 
@@ -71,6 +71,10 @@ def main():
     monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
     for i in tqdm(range(n_mcts)):
+        STEPS = 2000
+        if i % STEPS == STEPS - 1:
+            # time.sleep(0.015*STEPS)
+            pass
         # for debugging
         if (i == 57) or (i == 100):
             pass
@@ -91,6 +95,7 @@ def main():
 
         node_log = child
         for _ in range(n_simu):
+            # outcome = monte_carlo.simulation_cpp(child)
             outcome = monte_carlo.simulation_python(child)
             monte_carlo.backpropagation(child, outcome)
 
