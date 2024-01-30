@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 
 debug = False
+# debug = True
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
     #####################################
     # feel free to change these numbers
     #####################################
-    n_mcts = 100_000
+    n_mcts = 200_000
     n_show = 250
     # topk = 0
     #####################################
@@ -47,7 +48,10 @@ def main():
     # fen = "8/8/1r6/8/8/K1k5/8/8 b - - 0 1" # testing
     # fen = "8/8/1r6/8/8/2k5/K7/8 b - - 0 1" # testing
     fen = "8/8/r7/8/8/2k5/8/1K6 b - - 0 1" # testing. Black mate in 2 (GOOD for testing)
+
     # fen = "8/8/8/8/2K5/k7/8/1R6 w - - 0 1" # rook ending DTM: 6 # Rb5/6/7/8 BUG(fixed): Rb2 lose (GOOD)
+    # https://syzygy-tables.info/?fen=8/8/8/8/2K5/k7/8/1R6_w_-_-_0_1
+
     ##################################################################
 
     # fen = "8/3K4/8/8/8/k7/8/1Q6 w - - 0 1" # queen ending DTM: 4
@@ -57,7 +61,22 @@ def main():
 
     # fen = "8/8/8/8/8/8/2Kpk3/8 w - - 0 1" # easiest pawn ending (GOOD)
     # fen = "8/2kP4/4K3/8/8/8/8/8 w - - 0 1" # easier pawn ending (GOOD)
+
     # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3" # easy pawn ending (GOOD)
+    # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3"
+    # fen = "3k4/8/3PK3/8/8/8/8/8 w - - 1 3"
+    # fen = "8/2kPK3/8/8/8/8/8/8 b - - 0 1"
+    # fen = "8/3PK3/1k6/8/8/8/8/8 w - - 0 1"
+    # fen = "3Q4/4K3/1k6/8/8/8/8/8 b - - 0 1"
+    # fen = "3Q4/4K3/8/2k5/8/8/8/8 w - - 0 1"
+    # fen = "8/4K3/8/2k5/8/8/3Q4/8 b - - 0 1"
+    # fen = "8/4K3/8/1k6/8/8/3Q4/8 w - - 0 1"
+    # fen = "8/4K3/8/1k6/8/2Q5/8/8 b - - 0 1"
+    # fen = "8/4K3/8/8/k7/2Q5/8/8 w - - 0 1"
+    # fen = "8/4K3/8/8/k7/8/1Q6/8 b - - 0 1"
+    # fen = "8/4K3/8/k7/8/8/1Q6/8 w - - 0 1"
+
+
     # fen = "3k4/8/3K4/3P4/8/8/8/8 w - - 0 1"
     # fen = "8/6p1/5p2/5P2/4k1KP/8/8/8 w - - 0 1"
 
@@ -72,13 +91,16 @@ def main():
     # fen = "1r4k1/p1p2R2/4B1p1/8/8/1Pb5/q1P2PP1/3K3R w - - 3 28"
     # fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27" # (GOOD)
 
-    root_node = Node(chess.Board(fen), None, chess.WHITE, 0, 0, None)
+    _board = chess.Board(fen)
+    root_node = Node(_board, None, _board.turn, 0, 0, None)
     monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
     for i in tqdm(range(n_mcts)):
         STEPS = 2000
+        # STEPS = 1
         if i % STEPS == STEPS - 1:
             # time.sleep(0.015*STEPS)
+            # time.sleep(1)
             pass
         # for debugging
         if (i == 57) or (i == 100):
