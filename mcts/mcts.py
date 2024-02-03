@@ -6,10 +6,10 @@ from node import Node
 from operator import itemgetter
 import pathlib
 
-import cppyy
-# cppyy.include("mcts/chess.hpp")
-cppyy.include(pathlib.Path(__file__).parent / "chess.hpp")
-from cppyy.gbl import chess as cppchess
+# import cppyy
+# # cppyy.include("mcts/chess.hpp")
+# cppyy.include(pathlib.Path(__file__).parent / "chess.hpp")
+# from cppyy.gbl import chess as cppchess
 
 
 debug = False
@@ -65,8 +65,8 @@ class MonteCarloTreeSearch:
             if res:
                 return res
 
-        current_board = current_node.board
-        for legal_move in list(current_node.board.legal_moves):
+        current_board = chess.Board(current_node.fen)
+        for legal_move in list(current_board.legal_moves):
             current_board.push(legal_move)
             is_checkmate = current_board.is_checkmate()
             current_board.pop()
@@ -75,7 +75,7 @@ class MonteCarloTreeSearch:
                 child_board = chess.Board(current_board.fen())
                 move = child_board.san_and_push(legal_move)
                 child_node = Node(
-                    child_board, 
+                    child_board.fen(), 
                     current_node, 
                     chess.BLACK if current_node.player else chess.WHITE, 
                     0, 
@@ -140,12 +140,12 @@ class MonteCarloTreeSearch:
         # if node:
         #     return node
 
-        current_board = current_node.board
-        for legal_move in list(current_node.board.legal_moves):
-            child_board = chess.Board(current_board.fen())
+        current_board = chess.Board(current_node.fen)
+        for legal_move in list(current_board.legal_moves):
+            child_board = chess.Board(current_node.fen)
             move = child_board.san_and_push(legal_move)
             child_node = Node(
-                child_board, 
+                child_board.fen(), 
                 current_node, 
                 chess.BLACK if current_node.player else chess.WHITE, 
                 0, 
@@ -153,8 +153,8 @@ class MonteCarloTreeSearch:
                 move,
             )
             current_node.add_child(child_node)
-        if current_node.children: # how to deal with
-            return random.choice(current_node.children) # just simulate one time
+        if current_node.children:
+            return random.choice(current_node.children)
         else:
             return None
 
@@ -169,7 +169,7 @@ class MonteCarloTreeSearch:
     # )
 
     def simulation_cpp(self, current_node: Node) -> str:
-        fen = current_node.board.fen()
+        fen = current_node.fen
         board = cppchess.Board(fen)
         # moves = cppchess.Movelist()
         while board.isGameOver().second == cppchess.GameResult.NONE:
@@ -191,7 +191,7 @@ class MonteCarloTreeSearch:
 
 
     def simulation_python(self, current_node: Node) -> str:
-        current_board = chess.Board(current_node.board.fen())        
+        current_board = chess.Board(current_node.fen)        
         while not current_board.is_game_over():
             moves = list(current_board.legal_moves)
             t = [str(current_board.san(move)) for move in moves]

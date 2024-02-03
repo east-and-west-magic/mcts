@@ -6,13 +6,13 @@ import chess
 
 class Node:
     def __init__(self, 
-                 board: chess.Board, 
+                 fen: str, 
                  parent: Node, 
                  player: bool, 
                  wins: float, 
                  visits: int, 
                  move: str):
-        self.board = board
+        self.fen = fen
         self.parent = parent
         self.player = player
         self.wins = wins
@@ -48,7 +48,8 @@ class Node:
     
     
     def is_end(self) -> bool:
-        return self.board.is_game_over()
+        board = chess.Board(self.fen)
+        return board.is_game_over()
 
 
     def get_nodes(self) -> list[Node]:
