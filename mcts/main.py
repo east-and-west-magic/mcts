@@ -92,7 +92,7 @@ def main():
     # fen = "1r6/p1p3k1/4B1p1/5R2/8/1Pb5/q1P2PP1/3K3R w - - 1 27" # (GOOD)
 
     _board = chess.Board(fen)
-    root_node = Node(_board, None, _board.turn, 0, 0, None)
+    root_node = Node(fen, None, _board.turn, 0, 0, None)
     monte_carlo = MonteCarloTreeSearch(root_node, 1)
 
     for i in tqdm(range(n_mcts)):
@@ -111,7 +111,7 @@ def main():
 
         node_log = None
         if current.is_end():
-            current_board = chess.Board(current.board.fen())
+            current_board = chess.Board(current.fen)
             assert current_board.is_game_over()
             child = current
         else:
@@ -122,8 +122,8 @@ def main():
 
         node_log = child
         for _ in range(n_simu):
-            outcome = monte_carlo.simulation_cpp(child)
-            # outcome = monte_carlo.simulation_python(child)
+            # outcome = monte_carlo.simulation_cpp(child)
+            outcome = monte_carlo.simulation_python(child)
             monte_carlo.backpropagation(child, outcome)
 
         ###################### 
