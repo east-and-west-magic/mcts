@@ -1,4 +1,5 @@
 from typing import Any
+from ctypes import *
 import chess
 import random
 import math
@@ -225,6 +226,50 @@ class MonteCarloTreeSearch:
                 pass
         ############################
         return current_board.result()
+    
+    def simulation(self, current_node):
+        current_board = chess.Board(current_node.board.fen())
+        while not current_board.is_game_over():
+            move = random.choice(list(current_board.legal_moves))
+            current_board.push(move)
+        return current_board.result()
+    
+    def simulation_nn(self, current_node: Node) -> str:
+        nnue = cdll.LoadLibrary("./libnncpuprobe.so")
+        nnue.nncpu_init(b"nn-04cf2b4ed1da.nnue")
+        board = chess.Board(current_node.fen)
+        print('fen: ', current_node.fen)
+        while not board.is_game_over():
+            legal_moves = list(board.legal_moves)
+            # print('legal moves: ', legal_moves)
+            probs = []
+            for m in legal_moves:
+                temp_board = board.copy()
+                temp_board.push(m)
+                fen = temp_board.fen()
+                score = nnue.nncpu_evaluate_fen(fen.encode())
+                probs.append(score)
+            # print('scores before normalizing: ', probs)
+            probs = [prob - max(probs) for prob in probs]
+            # print('scores after normalizing: ', probs)
+            denominator = 0
+            for p in probs:
+                denominator += math.e**p
+            # print('denominator: ', denominator)
+            probs[0] = math.e**probs[0] / denominator
+            for i in range(len(probs) - 1):
+                probs[i + 1] = math.e**probs[i + 1] / denominator + probs[i]
+            # print('probabilities: ', probs)
+            random_number = random.random()
+            # print('random_number: ', random_number)
+            move = None
+            for i in range(len(probs)):
+                if (random_number <= probs[i]):
+                    move = legal_moves[i]
+                    break
+            board.push(move)
+            print('move chosen: ', move)
+        return board.result()
 
  
     def backpropagation(self, current_node:Node, outcome: float) -> None:
