@@ -2,6 +2,7 @@ from typing import Any
 from ctypes import *
 import chess
 import random
+import numpy as np
 import math
 from node import Node
 from operator import itemgetter
@@ -228,17 +229,20 @@ class MonteCarloTreeSearch:
         return current_board.result()
     
     def simulation(self, current_node):
-        current_board = chess.Board(current_node.board.fen())
+        current_board = chess.Board(current_node.fen)
         while not current_board.is_game_over():
             move = random.choice(list(current_board.legal_moves))
             current_board.push(move)
         return current_board.result()
     
+    nnue = cdll.LoadLibrary("./libnncpuprobe.so")
+    nnue.nncpu_init(b"nn-04cf2b4ed1da.nnue")
+
     def simulation_nn(self, current_node: Node) -> str:
-        nnue = cdll.LoadLibrary("./libnncpuprobe.so")
-        nnue.nncpu_init(b"nn-04cf2b4ed1da.nnue")
+        # nnue = cdll.LoadLibrary("./libnncpuprobe.so")
+        # filename = "/Users/stevez/playgo/mcts/mcts/libnnueprobe.so"
         board = chess.Board(current_node.fen)
-        print('fen: ', current_node.fen)
+        # print('fen: ', current_node.fen)
         while not board.is_game_over():
             legal_moves = list(board.legal_moves)
             # print('legal moves: ', legal_moves)
@@ -247,7 +251,7 @@ class MonteCarloTreeSearch:
                 temp_board = board.copy()
                 temp_board.push(m)
                 fen = temp_board.fen()
-                score = nnue.nncpu_evaluate_fen(fen.encode())
+                score = self.nnue.nncpu_evaluate_fen(fen.encode())
                 probs.append(score)
             # print('scores before normalizing: ', probs)
             probs = [prob - max(probs) for prob in probs]
@@ -256,6 +260,16 @@ class MonteCarloTreeSearch:
             for p in probs:
                 denominator += math.e**p
             # print('denominator: ', denominator)
+
+            # from sharp dist to smooth dist
+            # chances = np.array(probs)
+            chances = np.array([0]*len(probs))
+            chances = chances + 0.5
+            total = np.sum(chances)
+            chances = chances / total
+            for i in range(len(probs)):
+                probs[i] = chances[i]
+
             probs[0] = math.e**probs[0] / denominator
             for i in range(len(probs) - 1):
                 probs[i + 1] = math.e**probs[i + 1] / denominator + probs[i]
@@ -268,7 +282,7 @@ class MonteCarloTreeSearch:
                     move = legal_moves[i]
                     break
             board.push(move)
-            print('move chosen: ', move)
+            # print('move chosen: ', move)
         return board.result()
 
  
