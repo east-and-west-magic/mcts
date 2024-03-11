@@ -82,51 +82,103 @@ def predictv2(boardFen, times):
             result['draw']+=1
     return result
 
+def predictv3(boardFen, times):
+    result = {'win': 0, 'lose': 0, 'draw': 0}
+    nnue = cdll.LoadLibrary("./libnncpuprobe.so")
+    nnue.nncpu_init(b"nn-04cf2b4ed1da.nnue")
+    for x in tqdm(range(times)):
+        board = chess.Board(boardFen)
+        while not board.is_game_over():
+            legal_moves = list(board.legal_moves)
+            probs = []
+            for m in legal_moves:
+                temp_board = board.copy()
+                temp_board.push(m)
+                fen = temp_board.fen()
+                score = nnue.nncpu_evaluate_fen(fen.encode())
+                probs.append(score)
+            probs = [prob - max(probs) for prob in probs]
+            denominator = 0
+            for p in probs:
+                denominator += math.e**p
+            denominator *= 2
+            probs[0] = math.e**probs[0] / denominator
+            for i in range(len(probs) - 1):
+                probs[i + 1] = math.e**probs[i + 1] / denominator + probs[i]
+            random_number = random.random()
+            move = None
+            if random_number <= 0.5:
+                move = random.choice(legal_moves)
+            else:
+                random_number -= 0.5
+                for i in range(len(probs)):
+                    if (random_number <= probs[i]):
+                        move = legal_moves[i]
+                        break
+            board.push(move)
+        res = board.result()
+        if res == '1-0':
+            result['win']+=1
+        elif res == '0-1':
+            result['lose']+=1
+        else:
+            result['draw']+=1
+    return result
+
 def main():
     if False:
-        with open('./results/a.csv', 'w', newline='') as file:
+        with open('./results2/a.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen", "End Result"])
 
-            simulations = 1000
-            times = 25
-            # first FEN in time6.csv
-            fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
+            # simulations = 2500
+            # times = 25
+            # # first FEN in time6.csv
+            # fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
             
-            for x in tqdm(range(times)):
-                dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
-            writer.writerow([""])
+            # for x in tqdm(range(times)):
+            #     dict = predictv3(fen, simulations)
+            #     writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
+            # writer.writerow([""])
 
-            simulations = 5000
-            times = 25
-            fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
+            # simulations = 5000
+            # times = 25
+            # fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
             
-            for x in tqdm(range(times)):
-                dict = predict(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
-            writer.writerow([""])
+            # for x in tqdm(range(times)):
+            #     dict = predictv3(fen, simulations)
+            #     writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
+            # writer.writerow([""])
+
+            # simulations = 7500
+            # times = 25
+            # fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
+            
+            # for x in tqdm(range(times)):
+            #     dict = predictv3(fen, simulations)
+            #     writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
+            # writer.writerow([""])
 
             simulations = 10000
             times = 25
             fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
             
             for x in tqdm(range(times)):
-                dict = predict(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
             writer.writerow([""])
 
-            simulations = 50000
+            simulations = 20000
             times = 25
             fen = "8/1K1r4/8/8/8/8/6k1/1R6 w - - 37 109"
             
             for x in tqdm(range(times)):
-                dict = predict(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "1/2-1/2"])
             writer.writerow([""])
 
     if False:
-        with open('./results/b.csv', 'w', newline='') as file:
+        with open('./results2/b.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen", "End Result"])
 
@@ -176,7 +228,7 @@ def main():
             writer.writerow([""])
 
     if True:
-        with open('./results/c.csv', 'w', newline='') as file:
+        with open('./results2/b.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen"])
 
@@ -186,55 +238,23 @@ def main():
             fen = "8/8/r7/8/8/2k5/8/1K6 b - - 0 1"
 
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
 
             simulations = 5000
             
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
 
             simulations = 10000
             
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
-        
-        with open('./results/d.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen"])
-
-            simulations = 1000
-            times = 25
-            # FEN in main.py
-            fen = "8/8/r7/8/8/2k5/8/1K6 b - - 0 1"
-
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
-            writer.writerow([""])
-
-            simulations = 5000
-            
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
-            writer.writerow([""])
-
-            simulations = 10000
-            
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
-            writer.writerow([""])
-        
-        with open('./results/e.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen", "End Result"])
 
             simulations = 1000
             times = 25
@@ -242,49 +262,21 @@ def main():
             fen = "8/8/8/3k4/8/2K1r3/8/8 w - - 12 75"
 
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
             simulations = 5000
             
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
             simulations = 10000
             
             for x in tqdm(range(times)):
-                dict = predictv1(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
-            writer.writerow([""])
-        
-        with open('./results/f.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Number", "Wins", "Losses", "Draws", "Simulations", "Fen", "End Result"])
-
-            simulations = 1000
-            times = 25
-            # FEN in time6.csv
-            fen = "8/8/8/3k4/8/2K1r3/8/8 w - - 12 75"
-
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
-            writer.writerow([""])
-
-            simulations = 5000
-            
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
-                writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
-            writer.writerow([""])
-
-            simulations = 10000
-            
-            for x in tqdm(range(times)):
-                dict = predictv2(fen, simulations)
+                dict = predictv3(fen, simulations)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
