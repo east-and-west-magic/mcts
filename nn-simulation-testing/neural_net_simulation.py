@@ -82,7 +82,7 @@ def predictv2(boardFen, times):
             result['draw']+=1
     return result
 
-def predictv3(boardFen, times):
+def predictv3(boardFen, times, threshold):
     result = {'win': 0, 'lose': 0, 'draw': 0}
     nnue = cdll.LoadLibrary("./libnncpuprobe.so")
     nnue.nncpu_init(b"nn-04cf2b4ed1da.nnue")
@@ -101,20 +101,14 @@ def predictv3(boardFen, times):
             denominator = 0
             for p in probs:
                 denominator += math.e**p
-            denominator *= 2
-            probs[0] = math.e**probs[0] / denominator
-            for i in range(len(probs) - 1):
-                probs[i + 1] = math.e**probs[i + 1] / denominator + probs[i]
+            for i in range(len(probs)):
+                probs[i] = math.e**probs[i] / denominator
             random_number = random.random()
             move = None
-            if random_number <= 0.5:
+            if random_number <= threshold:
                 move = random.choice(legal_moves)
             else:
-                random_number -= 0.5
-                for i in range(len(probs)):
-                    if (random_number <= probs[i]):
-                        move = legal_moves[i]
-                        break
+                move = np.random.choice(a=legal_moves, p=probs)
             board.push(move)
         res = board.result()
         if res == '1-0':
@@ -238,21 +232,21 @@ def main():
             fen = "8/8/r7/8/8/2k5/8/1K6 b - - 0 1"
 
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
 
             simulations = 5000
             
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
 
             simulations = 10000
             
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen])
             writer.writerow([""])
 
@@ -262,21 +256,21 @@ def main():
             fen = "8/8/8/3k4/8/2K1r3/8/8 w - - 12 75"
 
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
             simulations = 5000
             
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
             simulations = 10000
             
             for x in tqdm(range(times)):
-                dict = predictv3(fen, simulations)
+                dict = predictv3(fen, simulations, 0.5)
                 writer.writerow([x + 1, dict['win'], dict['lose'], dict['draw'], simulations, fen, "0-1"])
             writer.writerow([""])
 
