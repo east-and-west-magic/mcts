@@ -1,0 +1,7 @@
+Number,Wins,Losses,Draws,Simulations,Fen,Random Threshold,
+1,4,18,178,200,1r6/p1p2Rk1/4B1p1/8/8/1Pb5/q1P2PP1/3K3R b - - 2 27,0.2,Better choice
+,,,,,,,
+1,9,9,182,200,1r6/p1p2Rk1/4B1p1/8/8/1Pb5/q1P2PP1/3K3R b - - 2 27,0.8,
+,Doubled,Halved,,,,,
+,,,,,,,
+,"More winning is bad, so more random is bad",,,,,,
